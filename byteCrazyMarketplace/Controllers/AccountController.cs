@@ -80,6 +80,9 @@ namespace byteCrazy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            // 直接允许登陆成功
+            return RedirectToAction("Register", "Account");
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
