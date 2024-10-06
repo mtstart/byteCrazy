@@ -1,0 +1,43 @@
+@model byteCrazy.Models.Users
+@{
+    ViewBag.Title = "Sample User";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<div>
+    <h4>User</h4>
+
+    UserID: @Model.UserID
+    <br />
+    FirstName: @Model.FirstName
+    <br />
+    LastName: @Model.LastName
+    <br />
+    StudentNumber: @Model.StudentNumber
+    <br />
+    Location: @Model.Location
+    <br />
+    Password: @Model.Password
+    <br />
+    CreatedDate: @Model.CreatedDate
+    <br />
+
+
+    @*@foreach (var item in (List<byteCrazy.Models.Users>)ViewData["UserList"])
+        {
+            <div class="col-lg-4 col-md-4">
+                <label>@item.FirstName</label>
+            </div>
+        }*@
+
+
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+        </dt>
+        Markup omitted for clarity.
+    </dl>
+</div>

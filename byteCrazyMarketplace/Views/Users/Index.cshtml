@@ -1,0 +1,18 @@
+﻿@model byteCrazy.Models.Users
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@ViewData["Greeting"]
+<br>
+
+
+@Html.ActionLink("User detail", "Details", "Users", routeValues: new { area = "" }, htmlAttributes: new { id = "SampleUserLink" })
+@Html.ActionLink("Sample User", "SampleUser", "Users", routeValues: new { area = "" }, htmlAttributes: new { id = "SampleUserLink" })
+
+
+
+
+
