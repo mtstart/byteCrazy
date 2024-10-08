@@ -8,6 +8,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .navbar-inverse .navbar-brand {
+            color: rgb(27 142 205);
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .navbar-inverse {
+            background-color: white;
+            border: none;
+            position: relative;
+        }
+
+        .navbar .container {
+            border-bottom: 5px solid #d5ecfa;
+            height: 60px;
+        }
+        .search-box {
+            position: absolute;
+            right: 125px;
+        }
+        .search-box input {
+            background-color: #d5ecfa;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 10px;
+            line-height: 24px;
+            width: 700px;
+            margin: 8px;
+        }
+        .navbar-collapse {
+            position: relative;
+        }
+        body {
+            padding-top: 0;
+        }
+        .search-box svg {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            right: 16px;
+            top: 13px;
+            fill: #646e77;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,10 +65,10 @@
                 @Html.ActionLink("byteCrazy", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
-                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="Search products and catalogues">
+                    <svg t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
+                </div>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
