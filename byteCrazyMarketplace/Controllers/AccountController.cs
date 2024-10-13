@@ -74,6 +74,15 @@ namespace byteCrazy.Controllers
         }
 
         //
+        // GET: /Account/Home
+        [AllowAnonymous]
+        public ActionResult Home(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]

@@ -3,95 +3,54 @@
 @{
     ViewBag.Title = "byteCrazy";
 }
-<style>
-    .swiper-slide img {
-        width: 100%;
-        height: 100%;
-    }
-    .mySwiper {
-    }
-    .card-item {
-        width: 340px;
-        border-radius: 5px;
-        height: 147px;
-        margin-bottom: 10px;
-        background-size: cover;
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
-        transition-duration: 0.5s;
-    }
-    .card-item p {
-        position: absolute;
-        bottom: -10px;
-        background: rgb(0, 0, 0, 0.6);
-        color: white;
-        width: 100%;
-        line-height: 33px;
-        padding: 0 2%;
-        font-size: 18px;
-        
-    }
-    .card-box-2 .card-item {
-        margin-right: 20px;
-        display: inline-block;
-    }
-    footer {
-        width: 1100px;
-        margin: 0 auto;
-    }
-    .card-item:hover {
-        transform: scale(1.1); /* 鼠标悬浮时放大1.1倍 */
-    }
-    .swiper-pagination {
-        bottom: 20px !important;
-    }
-</style>
-<link rel="stylesheet" href="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.css" />
-<!-- Swiper JS -->
-<script src="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.js"></script>
-<div class="to-box" style="display: flex;justify-content: space-between;">
-    <div class="swiper-box" style=" position: relative; ">
-        <div class="swiper mySwiper" style="width: 780px; height: 460px;">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/1.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/2.webp"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/3.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/4.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/5.webp"></div>
-            </div>
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-    <div class="card-box">
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/11.webp');"><p>Need to sell and item?​</p></div>
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/22.png');"><p>New Student?​​</p></div>
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/23.png');"><p>How to use?​​</p></div>
-    </div>
-    
-</div>
-<h2 style=" color: #5555c9; font-weight: bold; line-height: 44px; ">Categories</h2>
-<div class="card-box-2" style="overflow: auto;margin-top: 25px;">
-    <div class="card-box-3" style="display: flex;width: 1440px;">
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/24.png');"><p>Browse All Products​​</p></div>
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/25.png');"><p>Clothes​​​</p></div>
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/26.png');"><p>Renting​​​</p></div>
-        <div class="card-item" style="background-image: url('https://cunchu.site/temp/byteCrazy/27.png');"><p>Electronics​​​</p></div>
-    </div>
-    
-</div>
-    
 
-    <!-- Initialize Swiper -->
-    <script>
-        var swiper = new Swiper(".mySwiper", {
-        pagination: {
-            el: ".swiper-pagination",
-            loop: true,
-            autoplay:true
-        },
-        });
-    </script>
+<h2>@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>Log in to byteCrazy platform</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Log in" class="btn btn-default" />
+                    </div>
+                </div>
+                <p>
+                    @Html.ActionLink("Register as a new user", "Register")
+                </p>
+                @* 在为密码重置功能启用了帐户确认后，启用此项
+                    <p>
+                        @Html.ActionLink("忘记了密码?", "ForgotPassword")
+                    </p>*@
+            }
+        </section>
+    </div>
 </div>
 
 @section Scripts {
