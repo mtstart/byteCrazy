@@ -1,0 +1,78 @@
+﻿@using byteCrazy.Models
+@model List<AdminListModels>
+
+@{
+    ViewData["Title"] = "Admin Pending Lists";
+}
+
+<style>
+    .listing-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    .image-gallery {
+        display: flex;
+        overflow-x: auto;
+    }
+</style>
+
+<h1 class="mb-4">Admin Pending Lists</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Images</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Seller</th>
+            <th>Date Posted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var listing in Model)
+        {
+            <tr>
+                <td>
+                    <div class="image-gallery">
+                        @foreach (var imageUrl in listing.ImageUrls.Take(1))
+                        {
+                            <img src="@imageUrl" alt="Listing Image" class="listing-image mr-2">
+                        }
+                    </div>
+                </td>
+                <td>@listing.Title</td>
+                <td>@listing.Price.ToString("C")</td>
+                <td>@listing.SellerName</td>
+                <td>@listing.CreatedAt.ToShortDateString()</td>
+                <td>
+                    <button class="btn btn-success btn-sm" onclick="approveListing(@listing.ProductID)">Approve</button>
+                    <button class="btn btn-danger btn-sm" onclick="rejectListing(@listing.ProductID)">Reject</button>
+                    <button class="btn btn-primary btn-sm" onclick="viewDetails(@listing.ProductID)">View Details</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function approveListing(id) {
+        // Implement approval logic
+        console.log('Approve listing:', id);
+        window.location.href = '@Url.Action("ActiveListings", "Admin")';
+    }
+
+    function rejectListing(id) {
+        // Implement rejection logic
+        console.log('Reject listing:', id);
+        window.location.href = '@Url.Action("PendingListings", "Admin")';
+    }
+
+    function viewDetails(id) {
+        // Implement view details logic
+        console.log('View details for listing:', id);
+        window.location.href = '@Url.Action("ViewDetails", "Admin")';
+    }
+</script>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using byteCrazy.Interface;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -26,6 +27,9 @@ namespace byteCrazy.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<AdminListModels> Listings { get; set; }
+        public DbSet<ListingActivityLog> ListingActivityLogs { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -1,0 +1,110 @@
+﻿@using byteCrazy.Models
+@model byteCrazy.Models.AdminListModels
+
+@{
+    ViewBag.Title = "Verify Listing";
+}
+
+<h2>Verify Listing</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Listing Details</h3>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.Title)</dt>
+            <dd>@Html.DisplayFor(model => model.Title)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+            <dd>@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.Price)</dt>
+            <dd>@Html.DisplayFor(model => model.Price)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.SellerName)</dt>
+            <dd>@Html.DisplayFor(model => model.SellerName)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+            <dd>@Html.DisplayFor(model => model.CreatedAt)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.Category)</dt>
+            <dd>@Html.DisplayFor(model => model.Category)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.Location)</dt>
+            <dd>@Html.DisplayFor(model => model.Location)</dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <h3>Listing Images</h3>
+        @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+        {
+            <div id="listingCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    @for (int i = 0; i < Model.ImageUrls.Count; i++)
+                    {
+                        <li data-target="#listingCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                    }
+                </ol>
+                <div class="carousel-inner">
+                    @for (int i = 0; i < Model.ImageUrls.Count; i++)
+                    {
+                        <div class="item @(i == 0 ? "active" : "")">
+                            <img src="@Model.ImageUrls[i]" alt="Image @(i + 1)" style="width:100%;">
+                        </div>
+                    }
+                </div>
+                <a class="left carousel-control" href="#listingCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#listingCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <p>No images available</p>
+        }
+    </div>
+</div>
+
+<h3>Verification Action</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ProductID)
+
+    <div class="form-group">
+        <div class="radio">
+            <label>
+                <input type="radio" name="isApproved" value="true" checked /> Approve Listing
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="isApproved" value="false" /> Reject Listing
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group" id="rejectionReasonGroup" style="display: none;">
+        <label for="rejectionReason">Rejection Reason:</label>
+        <textarea name="rejectionReason" id="rejectionReason" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        @Html.ActionLink("Back to List", "PendingListings", null, new { @class = "btn btn-default" })
+    </div>
+}
+
+@section Scripts {
+    <script>$(document).ready(function () {
+            $('input[name="isApproved"]').change(function () {
+                if ($(this).val() === 'false') {
+                    $('#rejectionReasonGroup').show();
+                } else {
+                    $('#rejectionReasonGroup').hide();
+                }
+            });
+        });</script>
+}
