@@ -41,18 +41,30 @@
         margin: 0 auto;
     }
     .card-item:hover {
-        transform: scale(1.1); /* 鼠标悬浮时放大1.1倍 */
+        transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
     }
     .swiper-pagination {
         bottom: 20px !important;
+    }
+    .to-box {
+        display: flex;
+        justify-content: space-between;
+    }
+    .swiper {
+        width: 780px;
+        height: 460px;
+    }
+    .card-box-3 {
+        display: flex;
+        width: 1440px;
     }
 </style>
 <link rel="stylesheet" href="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.css" />
 <!-- Swiper JS -->
 <script src="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.js"></script>
-<div class="to-box" style="display: flex;justify-content: space-between;">
+<div class="to-box" style="">
     <div class="swiper-box" style=" position: relative; ">
-        <div class="swiper mySwiper" style="width: 780px; height: 460px;">
+        <div class="swiper mySwiper" style="">
             <div class="swiper-wrapper">
                 <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/1.jpg"></div>
                 <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/2.webp"></div>
@@ -72,7 +84,7 @@
 </div>
 <h2 style=" color: #5555c9; font-weight: bold; line-height: 44px; ">Categories</h2>
 <div class="card-box-2" style="overflow: auto;margin-top: 25px;">
-    <div class="card-box-3" style="display: flex;width: 1440px;">
+    <div class="card-box-3" style="">
         <div class="card-item" onclick="location.href='/Account/List'" style="background-image: url('https://cunchu.site/temp/byteCrazy/24.png');"><p>Browse All Products​​</p></div>
         <div class="card-item" onclick="location.href='/Account/List'" style="background-image: url('https://cunchu.site/temp/byteCrazy/25.png');"><p>Clothes​​​</p></div>
         <div class="card-item" onclick="location.href='/Account/List'" style="background-image: url('https://cunchu.site/temp/byteCrazy/26.png');"><p>Renting​​​</p></div>
