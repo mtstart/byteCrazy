@@ -1,0 +1,133 @@
+﻿@using byteCrazy.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "byteCrazy";
+}
+<style>
+    .swiper-slide img {
+        width: 100%;
+        height: 100%;
+    }
+    .mySwiper {
+    }
+
+    .swiper {
+        width: 680px;
+        height: 430px;
+    }
+    .to-box {
+        display: flex;
+        justify-content: space-between;
+    }
+    .card-box p {
+        font-size: 18px;
+        line-height: 30px;
+    }
+    .card-box h3 {
+        margin-top: 0;
+    }
+    p.detailed, textarea.detailed {
+        background-color: #f9f7f7;
+        padding: 20px;
+        weight: 100%;
+    }
+    p.detailed img {
+        display: block;
+        width: 100%;
+        margin: auto;
+    }
+    .edit-box {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        margin-bottom: 10px;
+    }
+    .edit-box button {
+        background-color: #009fe9;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        margin-left: 5px;
+    }
+    .editing {
+        border: 1px solid #8a8aa1;
+    }
+</style>
+<link rel="stylesheet" href="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.css" />
+<!-- Swiper JS -->
+<script src="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.js"></script>
+<h3 style=" margin-bottom: 20px;color: #009fe9;font-weight: bold; ">Awesome Budget 1080p Gaming PC​</h3>
+<div class="edit-box"><button>Edit</button><button>Collect</button><button>Save</button></div>
+<div class="to-box" style="">
+    <div class="swiper-box" style=" position: relative; ">
+        <div class="swiper mySwiper" style="">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/1.jpg"></div>
+                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/2.webp"></div>
+                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/3.jpg"></div>
+                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/4.jpg"></div>
+                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/5.webp"></div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <div class="card-box">
+        <h3>Awesome Budget 1080p Gaming PC</h3>
+        <p>Purchase/Manufacture Year: 2019<br>
+Category: Vehicle<br>
+Release time: 2024/10/21<br>
+Publisher: Anna<br>
+Number of Followers: 16<br>
+Original Price: $16,000<br>
+Current Price: $6,000</p>
+    </div>
+    
+</div>
+<h2 style=" color: #5555c9; font-weight: bold; line-height: 44px; ">Detailed Introduction</h2>
+<div class="edit-box"><button onclick="edit()">Edit</button></div>
+<p class="detailed">
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+<img src="https://cunchu.site/temp/byteCrazy/1.jpg">
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+Here is a detailed introduction<br>
+</p>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+        pagination: {
+            el: ".swiper-pagination",
+            loop: true,
+            autoplay:true
+        },
+        });
+        function edit () {
+            document.querySelector('.detailed').setAttribute('contenteditable', "")
+            document.querySelector('.detailed').classList.add('editing')
+        }
+    </script>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

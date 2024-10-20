@@ -18,5 +18,11 @@ namespace byteCrazy.Controllers
         {
             return View();
         }
+        // GET: /Home/Info
+        [AllowAnonymous]
+        public ActionResult Info()
+        {
+            return View();
+        }
     }
 }
