@@ -30,10 +30,10 @@ namespace byteCrazy.Controllers
 
             var viewModel = new AdminDashboardModels
             {
-                TotalListings = 0, // 替换为实际数据
-                PendingVerification = 0, // 替换为实际数据
-                ActiveListings = _listingManagementServiceInterface.solds.Count, // 替换为实际数据
-                SoldListings = _listingManagementServiceInterface.solds.Count // 替换为实际数据
+                TotalListings = _listingManagementServiceInterface.alls.Count, 
+                PendingVerification = _listingManagementServiceInterface.pendings.Count, 
+                ActiveListings = _listingManagementServiceInterface.actives.Count,
+                SoldListings = _listingManagementServiceInterface.solds.Count 
             };
             return View("AdminDashboard", viewModel);
 
@@ -41,84 +41,17 @@ namespace byteCrazy.Controllers
 
         public async Task<ActionResult> TotalListings()
         {
-           _listingManagementServiceInterface.GetAllPostedProducts();
-
-            return null;
+           return View("AdminTotalLists", _listingManagementServiceInterface.alls);
         }
 
         public async Task<ActionResult> PendingListings()
         {
-
-            var pendingListings = new List<AdminListModels>
-            {
-                new AdminListModels
-                {
-                    ProductID = "1",
-                    Title = "Vintage Guitar",
-                    Price = 1200.00m,
-                    SellerName = "John Doe",
-                    CreatedAt = DateTime.Now.AddDays(-2),
-                    ImageUrls = new List<string> { "https://cunchu.site/temp/byteCrazy/1.jpg", "https://cunchu.site/temp/byteCrazy/3.jpg" }
-                },
-                new AdminListModels
-                {
-                    ProductID = "2",
-                    Title = "Mountain Bike",
-                    Price = 800.50m,
-                    SellerName = "Jane Smith",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    ImageUrls = new List<string> { "https://cunchu.site/temp/byteCrazy/1.jpg", "https://cunchu.site/temp/byteCrazy/4.jpg" }
-                },
-                new AdminListModels
-                {
-                    ProductID = "3",
-                    Title = "Mountain Carmine",
-                    Price = 800.50m,
-                    SellerName = "Jae Willim",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    ImageUrls = new List<string> {
-                        "https://cunchu.site/temp/byteCrazy/1.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg"}
-                },
-            };
-
-            return View("AdminPendingLists", pendingListings);
+            return View("AdminPendingLists", _listingManagementServiceInterface.pendings);
         }
 
         public async Task<ActionResult> ActiveListings()
         {
-
-            var pendingListings = new List<AdminListModels>
-            {
-                new AdminListModels
-                {
-                    ProductID = "2",
-                    Title = "M2",
-                    Price = 800.50m,
-                    SellerName = "Jane Smith",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    ImageUrls = new List<string> { "https://cunchu.site/temp/byteCrazy/5.jpg" }
-                },
-                new AdminListModels
-                {
-                    ProductID = "1",
-                    Title = "Mo3",
-                    Price = 800.50m,
-                    SellerName = "Jae Willim",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    ImageUrls = new List<string> {
-                        "https://cunchu.site/temp/byteCrazy/3.jpg",
-                        "https://cunchu.site/temp/byteCrazy/3.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg"}
-                },
-            };
-
-            return View("AdminPendingLists", pendingListings);
+            return View("AdminPendingLists", _listingManagementServiceInterface.actives);
         }
 
         public async Task<ActionResult> ViewDetails()

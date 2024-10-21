@@ -114,7 +114,7 @@ namespace byteCrazy.Models
 
         public void Verify(string adminId)
         {
-            Status = ListingStatus.Verified;
+            Status = ListingStatus.Active;
             VerifiedBy = adminId;
             VerifiedAt = DateTime.Now;
             LastModifiedAt = DateTime.Now;

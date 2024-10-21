@@ -25,14 +25,19 @@ namespace byteCrazy.Interface
     public class AdminListMangementService : IAdminListMangementService
     {
         private string connectionString = "Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;";
-        //private string connectionString =  ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
+        
         private readonly ApplicationDbContext _context;
 
         public AdminListMangementService(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        //All
+        public List<AdminListModels> alls { get; set; }
+
+        //Pending
+        public List<AdminListModels> pendings { get; set; }
 
         //Sold
         public List<AdminListModels> solds { get; set; }
@@ -46,12 +51,14 @@ namespace byteCrazy.Interface
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT userID, productID, createdDate, status FROM PostedProducts";
+                string query = "SELECT * FROM Product";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        alls = new List<AdminListModels>();
+                        pendings = new List<AdminListModels>();
                         solds = new List<AdminListModels>();
                         actives = new List<AdminListModels>();
 
@@ -59,20 +66,29 @@ namespace byteCrazy.Interface
                         {
                             var product = new AdminListModels
                             {
-                                UserID = reader["userID"].ToString(),
+                                UserID = reader["sellerId"].ToString(),
+                                Title = reader["title"].ToString(),
                                 ProductID = reader["productID"].ToString(),
-                                CreatedAt = Convert.ToDateTime(reader["createdDate"]),
-                                StatusString = reader["status"].ToString()
+                                CreatedAt = Convert.ToDateTime(reader["postedDate"]),
+                                StatusString = reader["status"].ToString(),
+                                ImageUrls = new List<string> { reader["imgUrl"].ToString() }
                             };
 
-                            if (product.Status == ListingStatus.Sold)
+                            alls.Add(product);
+
+                            switch (product.Status)
                             {
-                                solds.Add(product);
+                                case ListingStatus.Sold:
+                                    solds.Add(product);
+                                    break;
+                                case ListingStatus.Active:
+                                    actives.Add(product);
+                                    break;
+                                default:
+                                    pendings.Add(product);
+                                    break;
                             }
-                            else
-                            {
-                                actives.Add(product);
-                            }
+
                         }
                     }
                 }
@@ -149,7 +165,7 @@ namespace byteCrazy.Interface
             {
                 TotalListings = await _context.Listings.CountAsync(),
                 PendingVerification = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Pending),
-                ActiveListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Verified),
+                ActiveListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Active),
                 SoldListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Sold),
                 RejectedListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Rejected)
             };

@@ -324,6 +324,7 @@
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
     <Content Include="Views\Admin\AdminPendingLists.cshtml" />
     <Content Include="Views\Admin\AdminVerifyLists.cshtml" />
+    <Content Include="Views\Admin\AdminTotalLists.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

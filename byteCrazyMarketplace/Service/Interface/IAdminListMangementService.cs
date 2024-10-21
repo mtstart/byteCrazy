@@ -7,6 +7,12 @@ namespace byteCrazy.Interface
 {
 	public interface IAdminListMangementService
     {
+        //All
+        List<AdminListModels> alls { get; set; }
+
+        //Pending
+        List<AdminListModels> pendings { get; set; }
+
         //Sold
         List<AdminListModels> solds { get; set; }
 
@@ -58,7 +64,7 @@ namespace byteCrazy.Interface
     public enum ListingStatus
     {
         Pending,
-        Verified,
+        Active,
         Rejected,
         Sold
     }
