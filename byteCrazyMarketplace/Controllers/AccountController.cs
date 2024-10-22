@@ -3,23 +3,31 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+
+
 
 namespace byteCrazy.Controllers
 {
+   
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -73,9 +81,6 @@ namespace byteCrazy.Controllers
             return View();
         }
 
-
-        
-
         //
         // POST: /Account/Login
         [HttpPost]
@@ -83,9 +88,6 @@ namespace byteCrazy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            // 直接允许登陆成功
-            return RedirectToAction("Register", "Account");
-            
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -157,6 +159,19 @@ namespace byteCrazy.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.HometownList = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "Newcastle", Value = "Newcastle" },
+        new SelectListItem { Text = "Hamilton", Value = "Hamilton" },
+        new SelectListItem { Text = "Cooks Hill", Value = "Cooks Hill" },
+        new SelectListItem { Text = "Merewether", Value = "Merewether" },
+        new SelectListItem { Text = "Islington", Value = "Islington" },
+        new SelectListItem { Text = "Broadmeadow", Value = "Broadmeadow" },
+        new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
+        new SelectListItem { Text = "Stockton", Value = "Stockton" },
+        new SelectListItem { Text = "Waratah", Value = "Waratah" },
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+    };
             return View();
         }
 
@@ -169,40 +184,91 @@ namespace byteCrazy.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+                var email = model.StudentNumber + "@uon.edu.au";
+                var existingUser = await UserManager.FindByEmailAsync(email);
+
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("", "This account already exists, please do not register again.");
+                    ViewBag.HometownList = GetHometownList();
+                    return View(model);
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    Hometown = model.Hometown,
+                    PhoneNumber = model.PhoneNumber,
+                    Id = model.StudentNumber  
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    // 有关如何启用帐户确认和密码重置的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=320771
-                    // 发送包含此链接的电子邮件
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击<a href=\"" + callbackUrl + "\">此处</a>来确认你的帐户");
-
                     return RedirectToAction("Index", "Home");
                 }
+
                 AddErrors(result);
             }
 
-            // 如果我们进行到这一步时某个地方出错，则重新显示表单
+            ViewBag.HometownList = GetHometownList();
             return View(model);
+        }
+
+        // 辅助方法来获取 HometownList
+        private List<SelectListItem> GetHometownList()
+        {
+            return new List<SelectListItem>
+    {
+        new SelectListItem { Text = "Newcastle", Value = "Newcastle" },
+        new SelectListItem { Text = "Hamilton", Value = "Hamilton" },
+        new SelectListItem { Text = "Cooks Hill", Value = "Cooks Hill" },
+        new SelectListItem { Text = "Merewether", Value = "Merewether" },
+        new SelectListItem { Text = "Islington", Value = "Islington" },
+        new SelectListItem { Text = "Broadmeadow", Value = "Broadmeadow" },
+        new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
+        new SelectListItem { Text = "Stockton", Value = "Stockton" },
+        new SelectListItem { Text = "Waratah", Value = "Waratah" },
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+    };
         }
 
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> UserCenter()
         {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
+            var userId = User.Identity.GetUserId();
 
+            var publishedProductsOnSale = await _context.Product
+                .Where(p => p.SellerID == userId && p.Status == "onsale")
+                .ToListAsync();
+
+            var publishedProductsSold = await _context.Product
+                .Where(p => p.SellerID == userId && p.Status == "sold")
+                .ToListAsync();
+
+            var purchasedProducts = await _context.Product
+                .Where(p => p.BuyerID == userId)
+                .ToListAsync();
+
+            var savedProducts = await _context.SavedProducts
+                .Where(sp => sp.UserID == userId)
+                .Select(sp => sp.Product)
+                .ToListAsync();
+
+            var model = new UserCenterViewModel
+            {
+                PublishedProductsOnSale = publishedProductsOnSale,
+                PublishedProductsSold = publishedProductsSold,
+                PurchasedProducts = purchasedProducts,
+                SavedProducts = savedProducts
+            };
+
+            return View(model);
+        }
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -212,7 +278,8 @@ namespace byteCrazy.Controllers
         }
 
         //
-        // POST: /Account/ForgotPassword
+        //// POST: /Account/ForgotPassword
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -220,24 +287,56 @@ namespace byteCrazy.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                var email = model.StudentNumber + "@uon.edu.au";
+                var user = await UserManager.FindByEmailAsync(email);
+
+                if (user == null)
                 {
-                    // 请不要显示该用户不存在或者未经确认
-                    return View("ForgotPasswordConfirmation");
+                    ModelState.AddModelError("", "Input error.  Please check and try again.");
+                    return View(model);
                 }
 
-                // 有关如何启用帐户确认和密码重置的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=320771
-                // 发送包含此链接的电子邮件
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击<a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                if (user.PhoneNumber != model.PhoneNumber)
+                {
+                    ModelState.AddModelError("", "Input error. The phone number does not match our records. Please check and try again.");
+                    return View(model);
+                }
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                // 这里通常会发送一封包含重置链接的邮件，但为了简化，我们直接重定向
+                return RedirectToAction("ResetPassword", new { email = user.Email, code = code });
             }
 
-            // 如果我们进行到这一步时某个地方出错，则重新显示表单
+            // 如果我们到达这里，说明出现了问题，重新显示表单
             return View(model);
         }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await UserManager.FindByNameAsync(model.Email);
+        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+        //        {
+        //            // 请不要显示该用户不存在或者未经确认
+        //            return View("ForgotPasswordConfirmation");
+        //        }
+
+        //        // 有关如何启用帐户确认和密码重置的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=320771
+        //        // 发送包含此链接的电子邮件
+        //        // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+        //        // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+        //        // await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击<a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
+        //        // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+        //    }
+
+        //    // 如果我们进行到这一步时某个地方出错，则重新显示表单
+        //    return View(model);
+        //}
 
         //
         // GET: /Account/ForgotPasswordConfirmation
@@ -250,13 +349,11 @@ namespace byteCrazy.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string email, string code)
         {
-            return code == null ? View("Error") : View();
+            return code == null ? View("Error") : View(new ResetPasswordViewModel { Email = email, Code = code });
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -266,11 +363,11 @@ namespace byteCrazy.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                // 请不要显示该用户不存在
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                ModelState.AddModelError("", "No user found with this email address.");
+                return View(model);
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
@@ -278,8 +375,9 @@ namespace byteCrazy.Controllers
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
-            return View();
+            return View(model);
         }
+
 
         //
         // GET: /Account/ResetPasswordConfirmation
@@ -385,13 +483,33 @@ namespace byteCrazy.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+
+                // 新增：检查邮箱是否已被使用
+                var existingUser = await UserManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("", "Email already exists. Please use a different email address.");
+                    return View(model);
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Hometown = model.Hometown,
+                    // 新增：添加 StudentNumber 属性
+                    Id = model.StudentNumber
+                };
+
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
+                        // 新增：保存额外的用户信息
+                        await SaveAdditionalUserInfoAsync(user, model);
+
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
@@ -401,6 +519,21 @@ namespace byteCrazy.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
+        }
+
+        // 新增：保存额外用户信息的方法
+        private async Task SaveAdditionalUserInfoAsync(ApplicationUser user, ExternalLoginConfirmationViewModel model)
+        {
+            // 这里可以保存不适合放在 ApplicationUser 中的额外信息
+            // 例如，保存到一个单独的 UserDetails 表中
+            var userDetails = new UserDetails
+            {
+                UserId = user.Id,
+
+            };
+
+            _context.UserDetails.Add(userDetails);
+            await _context.SaveChangesAsync();
         }
 
         //
@@ -440,6 +573,11 @@ namespace byteCrazy.Controllers
 
             base.Dispose(disposing);
         }
+
+
+  
+
+
 
         #region 帮助程序
         // 用于在添加外部登录名时提供 XSRF 保护

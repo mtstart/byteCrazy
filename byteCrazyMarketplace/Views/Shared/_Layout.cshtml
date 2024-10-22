@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - Trading Platform</title>
+    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/css")
@@ -57,6 +57,7 @@
         
         
     </style>
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -67,13 +68,33 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("byteCrazy", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("应用程序名称", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <div class="search-box">
-                    <input type="text" placeholder="Search products and catalogues">
-                    <svg t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
-                </div>
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("主页", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="@Url.Action("UserCenter", "Account")">个人中心</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("LogOff", "Account")">注销</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="@Url.Action("Login", "Account")">登录</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Register", "Account")">注册</a>
+                        </li>
+                    }
+                </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
@@ -83,10 +104,9 @@
         @RenderSection("SPAViews", required: false)
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - byteCrazy</p>
+            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("Scripts", required: false)

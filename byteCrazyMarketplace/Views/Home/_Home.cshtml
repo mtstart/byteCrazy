@@ -1,32 +1,47 @@
-﻿<!-- ko with: home -->
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Welcome to Our Website!</h1>
+    <p class="lead">Explore our products and services.</p>
+    <p><a class="btn btn-primary btn-lg" href="#">Learn more</a></p>
 </div>
+
+<!-- 导航栏代码 -->
+<ul class="nav navbar-nav">
+    <li>
+        <a href="@Url.Action("Index", "Home")">Home</a>
+    </li>
+    <li>
+        <a href="@Url.Action("Products", "Product")">Products</a>
+    </li>
+
+    <!-- 个人中心按钮 -->
+    <li class="nav-item text-center">
+        <a href="@Url.Action("UserCenter", "Account")">个人中心</a>
+    </li>
+
+    <li>
+        <a href="@Url.Action("Contact", "Home")">Contact</a>
+    </li>
+</ul>
+
+<!-- 页面内容 -->
 <div class="row">
     <div class="col-md-4">
-        <h2>Your information</h2>
-        <p>This section shows how you can call ASP.NET Web API to get the user details.</p>
-        <p data-bind="text: myHometown"></p>
-       
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=273732">Learn more &raquo;</a></p>
+        <h2>Section 1</h2>
+        <p>Details about section 1...</p>
+        <p><a class="btn btn-default" href="#">View details »</a></p>
     </div>
-
     <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET Single Page Application (SPA) helps you build applications that include significant client-side interactions using HTML, CSS, and JavaScript.
-            It's now easier than ever before to getting started writing highly interactive web applications.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=273732">Learn more &raquo;</a></p>
+        <h2>Section 2</h2>
+        <p>Details about section 2...</p>
+        <p><a class="btn btn-default" href="#">View details »</a></p>
     </div>
-
     <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <h2>Section 3</h2>
+        <p>Details about section 3...</p>
+        <p><a class="btn btn-default" href="#">View details »</a></p>
     </div>
 </div>
-
-<!-- /ko -->

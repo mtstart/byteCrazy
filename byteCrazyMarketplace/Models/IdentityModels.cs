@@ -1,35 +1,75 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace byteCrazy.Models
 {
-    // 可以通过将更多属性添加到 ApplicationUser 类来为用户添加配置文件数据，请访问 https://go.microsoft.com/fwlink/?LinkID=317594 了解详细信息。
+
     public class ApplicationUser : IdentityUser
     {
         public string Hometown { get; set; }
+      
+        //public string Id { get; set; }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
-            // 请注意，authenticationType 必须与 CookieAuthenticationOptions.AuthenticationType 中定义的相应项匹配
+       
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // 在此处添加自定义用户声明
+       
             return userIdentity;
         }
     }
 
+    // 数据库上下文
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<UserDetails> UserDetails { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(null);
         }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        public DbSet<Product> Product { get; set; }
+        public DbSet<SavedProduct> SavedProducts { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>()
+         .ToTable("Product", "");
+
+            modelBuilder.Entity<SavedProduct>()
+                .HasKey(sp => new { sp.UserID, sp.ProductID });
+
+            modelBuilder.Entity<SavedProduct>()
+                .HasRequired(sp => sp.User)
+                .WithMany()
+                .HasForeignKey(sp => sp.UserID);
+
+            modelBuilder.Entity<SavedProduct>()
+                .HasKey(sp => new { sp.UserID, sp.ProductID });
+
+            modelBuilder.Entity<SavedProduct>()
+                .HasRequired(sp => sp.User)
+                .WithMany()
+                .HasForeignKey(sp => sp.UserID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SavedProduct>()
+                .HasRequired(sp => sp.Product)
+                .WithMany()
+                .HasForeignKey(sp => sp.ProductID)
+                .WillCascadeOnDelete(false);
         }
     }
 }
