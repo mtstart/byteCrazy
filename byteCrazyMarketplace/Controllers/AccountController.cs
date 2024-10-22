@@ -161,7 +161,7 @@ namespace byteCrazy.Controllers
         {
             ViewBag.HometownList = new List<SelectListItem>
     {
-        new SelectListItem { Text = "Newcastle", Value = "Newcastle" },
+        new SelectListItem { Text = "Newcastle", Value = "Newcastle1111111" },
         new SelectListItem { Text = "Hamilton", Value = "Hamilton" },
         new SelectListItem { Text = "Cooks Hill", Value = "Cooks Hill" },
         new SelectListItem { Text = "Merewether", Value = "Merewether" },
