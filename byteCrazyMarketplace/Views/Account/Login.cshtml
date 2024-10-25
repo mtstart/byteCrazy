@@ -1,58 +1,167 @@
-﻿@using byteCrazy.Models
-@model LoginViewModel
+﻿@model byteCrazy.Models.LoginViewModel
+
 @{
-    ViewBag.Title = "byteCrazy";
+    Layout = null;
 }
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Your Application</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1877f2;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .form-control-readonly {
+            background-color: #f0f2f5;
+            color: #65676b;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+            .btn-primary:hover {
+                background-color: #166fe5;
+            }
+
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+
+            .checkbox-container input[type="checkbox"] {
+                margin-right: 0.5rem;
+            }
+
+        .forgot-password, .register-link {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+            .forgot-password a, .register-link a {
+                color: #1877f2;
+                text-decoration: none;
+            }
+
+        .register-link {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dddfe2;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="login-container">
+            <h2>Login</h2>
+
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "loginForm" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Log in to byteCrazy platform</h4>
-                <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* 在为密码重置功能启用了帐户确认后，启用此项
-                    <p>
-                        @Html.ActionLink("忘记了密码?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
-    </div>
-</div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+                <div class="form-group">
+                    <input type="text" id="studentNumber" name="StudentNumber" class="form-control" placeholder="Student Number" required />
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="email" name="Email" class="form-control form-control-readonly" placeholder="Email" readonly />
+                </div>
+
+                <div class="form-group">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
+                </div>
+
+                <div class="checkbox-container">
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe, "Remember me")
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            }
+
+            <div class="forgot-password">
+                @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")
+            </div>
+
+            <div class="register-link">
+                Don't have an account? @Html.ActionLink("Register", "Register", "Account")
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var studentNumberInput = document.getElementById('studentNumber');
+            var emailInput = document.getElementById('email');
+
+            studentNumberInput.addEventListener('blur', function () {
+                var studentNumber = studentNumberInput.value;
+                if (studentNumber && studentNumber.length === 7) {
+                    emailInput.value = studentNumber + '@@uon.edu.au';
+                } else {
+                    emailInput.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
