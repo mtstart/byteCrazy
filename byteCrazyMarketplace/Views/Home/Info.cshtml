@@ -1,7 +1,17 @@
 ﻿@using byteCrazy.Models
-@model LoginViewModel
+@using Dapper;
+@using Newtonsoft.Json;
+@using System.Data.SqlClient
 @{
     ViewBag.Title = "byteCrazy";
+    using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;")) {
+        connection.Open();
+        // 示例查询
+        string productID = Request.QueryString["productID"];
+        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [productID] = @productID";
+        IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID});
+        ViewBag.dataTemp = JsonConvert.SerializeObject(results);
+    }
 }
 <style>
     .swiper-slide img {
@@ -127,7 +137,17 @@ Here is a detailed introduction<br>
         }
     </script>
 </div>
-
+<script>
+let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+dataList = dataList[0]
+document.querySelector('.card-box').innerHTML = `<h3>${dataList.title}</h3>
+        <p>Purchase/Manufacture Year: ${dataList.postedDate}<br>
+Category: ${dataList.categoryID}<br>
+Release time: ${dataList.purchaseDate}<br>
+Publisher: ${dataList.sellerID}<br>
+Number of Followers: 16<br>
+Current Price: ${dataList.price}</p>`
+</script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
