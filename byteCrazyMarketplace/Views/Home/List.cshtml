@@ -1,8 +1,38 @@
 ﻿@using byteCrazy.Models
-@model LoginViewModel
+@using Dapper;
+@using Newtonsoft.Json;
+@using System.Data.SqlClient
 @{
     ViewBag.Title = "byteCrazy";
+    using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;")) {
+        connection.Open();
+        // 示例查询
+        string categoryStr = Request.QueryString["categoryID"];
+        string Location = Request.QueryString["Location"];
+        string priceMin = Request.QueryString["priceMin"];
+        string priceMax = Request.QueryString["priceMax"];
+        string description = Request.QueryString["description"];
+        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [status] = 'active'";
+        if (!string.IsNullOrEmpty(categoryStr)) {
+            sql = sql + " AND [categoryID] = @categoryID";
+        }
+        if (!string.IsNullOrEmpty(Location)) {
+            sql = sql + " AND [location] = @Location";
+        }
+        if (!string.IsNullOrEmpty(priceMin)) {
+            sql = sql + " AND [price] > @priceMin";
+        }
+        if (!string.IsNullOrEmpty(priceMax)) {
+            sql = sql + " AND [price] < @priceMax";
+        }
+        if (!string.IsNullOrEmpty(description)) {
+            sql = sql + " AND [description] LIKE '%" + description + "%'";
+        }
+        IEnumerable<dynamic> results = connection.Query(sql, new { categoryID = categoryStr, Location = Location, priceMin = priceMin,priceMax = priceMax });
+        ViewBag.dataTemp = JsonConvert.SerializeObject(results);
+    }
 }
+
 <style>
 .select-box {
     position: relative;
@@ -57,22 +87,27 @@
 .card-list .card:hover {
     transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
 }
+.select-box input {
+    background-color: #ebe9e9;
+    height: 31px;
+    border: none;
+    border-radius: 7px;
+    padding: 0 10px;
+    width: 80px;
+}
 </style>
-
 <h3 style=" margin-bottom: 20px; ">Search results for computer​</h3>
 <div class="select-box">
 <select name="Categories" id="Categories">
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
+    <option value="">Categories</option>
+    <option value="CAT001">Electronics</option>
+    <option value="CAT002">Clothing</option>
+    <option value="CAT003">Books</option>
+    <option value="CAT004">Home & Garden</option>
+    <option value="CAT005">Sports & Outdoors</option>
 </select>
 <select name="Latest" id="Latest">
+    <option value="">No filter</option>
     <option value="Latest">Latest</option>
     <option value="Categories">Categories</option>
     <option value="Categories">Categories</option>
@@ -84,107 +119,59 @@
     <option value="Categories">Categories</option>
 </select>
 <select name="Location" id="Location">
-    <option value="Location">Location</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
+    <option value="">Location</option>
+    <option value="New York">New York</option>
+    <option value="Los Angeles">Los Angeles</option>
+    <option value="Chicago">Chicago</option>
+    <option value="San Francisco">San Francisco</option>
+    <option value="Seattle">Seattle</option>
+    <option value="Boston">Boston</option>
+    <option value="Miami">Miami</option>
+    <option value="Denver">Denver</option>
+    <option value="Austin">Austin</option>
+    <option value="Portland">Portland</option>
 </select>
-<select name="Price" id="Price">
-    <option value="Price">Price</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-</select>
-<div class="search-button">Search</div>
+<span>Price:</span>
+<input type="number" id="priceMin">
+<span>-</span>
+<input type="number" id="priceMax">
+
+<div class="search-button" onclick="Search()">Search</div>
 </div>
 <div class="card-list">
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="card" onclick="selectCard()">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>Awesome Budget 1080p Gaming PC​</p>
-        <p>$400​​</p>
-        <p>Newcastle | 3km​</p>
-    </div>
-    <div class="clear"></div>
 </div>
 <script>
-function selectCard(params) {
-    location.href = '/Home/Info'
+function selectCard(id) {
+    location.href = '/Home/Info?productID=' + id
+}
+</script>
+<script>
+let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+let tempHtml = ``
+dataList.forEach(element => {
+    tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
+        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
+        <p>${element.description}​</p>
+        <p>${element.price}​$​</p>
+        <p>${element.location} | ${element.title}​</p>
+    </div>`
+    document.querySelector('.card-list').innerHTML = tempHtml + `<div class="clear"></div>`
+});
+function Search () {
+    let resultsUrl = '/Home/List?'
+    if (window.Categories.value) {
+        resultsUrl += "categoryID=" + window.Categories.value + '&'
+    }
+    if (window.Location.value) {
+        resultsUrl += "Location=" + window.Location.value + '&'
+    }
+    if (window.priceMin.value) {
+        resultsUrl += "priceMin=" + window.priceMin.value + '&'
+    }
+    if (window.priceMax.value) {
+        resultsUrl += "priceMax=" + window.priceMax.value + '&'
+    }
+    location.href = resultsUrl
 }
 </script>
 @section Scripts {

@@ -1,47 +1,189 @@
 ﻿@model byteCrazy.Models.RegisterViewModel
+
 @{
-    ViewBag.Title = "Register";
+    Layout = null; // This ensures that no layout (including navigation) is used
 }
 
-<h2>@ViewBag.Title.</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Your Application</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            font-size: 16px;
+        }
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Hometown, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Hometown, new { @class = "form-control" })
-        </div>
-    </div>    
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="register" />
-        </div>
-    </div>
-}
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        .register-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1877f2;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background-color: #1877f2;
+            color: white;
+        }
+
+            .btn-primary:disabled {
+                background-color: #BEC3C9;
+                cursor: not-allowed;
+            }
+
+        .btn-secondary {
+            background-color: #e4e6eb;
+            color: #050505;
+        }
+
+            .btn-secondary:hover {
+                background-color: #d8dadf;
+            }
+
+        .text-danger {
+            color: #ff0000;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="register-container">
+            <h2>Register</h2>
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "registerForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <input type="text" id="studentNumber" name="StudentNumber" class="form-control" placeholder="Student Number" required />
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="email" name="Email" class="form-control" placeholder="Email" readonly />
+                </div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone Number (9 digits)" })
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.DropDownListFor(m => m.Hometown, new SelectList(ViewBag.HometownList, "Value", "Text"), "Select your hometown", new { @class = "form-control", id = "hometown" })
+                </div>
+
+                <div class="form-group">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "password", placeholder = "Password", required = "required" })
+                </div>
+
+                <div class="form-group">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", id = "confirmPassword", placeholder = "Confirm Password", required = "required" })
+                    <span id="passwordMismatchError" class="text-danger" style="display:none;">Passwords do not match!</span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" id="submitButton" value="Register" class="btn btn-primary" disabled />
+                </div>
+            }
+
+            <div class="form-group">
+                <a href="@Url.Action("Login", "Account")" class="btn btn-secondary">Back to Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('registerForm');
+            var submitButton = document.getElementById('submitButton');
+            var studentNumberInput = document.getElementById('studentNumber');
+            var emailInput = document.getElementById('email');
+            var passwordInput = document.getElementById('password');
+            var confirmPasswordInput = document.getElementById('confirmPassword');
+            var passwordMismatchError = document.getElementById('passwordMismatchError');
+            var hometownSelect = document.getElementById('hometown');
+            var phoneNumberInput = document.getElementById('PhoneNumber');
+
+            submitButton.disabled = true;
+
+            studentNumberInput.addEventListener('input', function () {
+                var studentNumber = this.value.trim();
+                emailInput.value = studentNumber ? studentNumber + '@@uon.edu.au' : '';
+                checkFormCompletion();
+            });
+
+            function checkFormCompletion() {
+                submitButton.disabled = !(form.checkValidity() && passwordsMatch() && hometownSelect.value !== "");
+            }
+
+            function passwordsMatch() {
+                var match = passwordInput.value === confirmPasswordInput.value;
+                passwordMismatchError.style.display = match ? "none" : "block";
+                return match;
+            }
+
+            form.addEventListener('input', function () {
+                passwordsMatch();
+                checkFormCompletion();
+            });
+
+            phoneNumberInput.addEventListener('input', function () {
+                this.setCustomValidity(
+                    this.value.length === 9 && /^\d+$/.test(this.value)
+                        ? ''
+                        : 'Phone number must be 9 digits'
+                );
+                checkFormCompletion();
+            });
+        });
+    </script>
+</body>
+</html>
