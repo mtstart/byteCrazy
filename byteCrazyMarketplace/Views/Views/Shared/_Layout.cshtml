@@ -84,6 +84,7 @@
             right: 16px;
             top: 13px;
             fill: #646e77;
+            cursor: pointer;
         }
 
         .nav-button {
@@ -94,8 +95,17 @@
                 color: #d5ecfa;
             }
 
+
+        .nav-button-text {
+            border-bottom: solid 4px transparent;
+        }
+
+            .nav-button-text:hover {
+                border-bottom: solid 4px #d5ecfa;
+            }
+
         .navbar-inverse .navbar-nav > li > a:hover {
-            color: black;
+            color: #9d9d9d;
         }
 
         .navbar-toggle {
@@ -107,11 +117,9 @@
         }
 
             .icon-bar:hover {
-                border: solid 1px red;
             }
 
             .icon-bar:focus {
-                border: solid 1px red;
                 background-color: white !important;
             }
 
@@ -128,12 +136,15 @@
             padding: 20px 0px;
             color: #07065C;
         }
+            .footer-container {
+                width: 90%;
+                align-self: center;
+            }
 
         .site-intro {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             margin-bottom: 16px;
-
             font-weight: bold;
         }
 
@@ -145,11 +156,11 @@
             .site-intro .connect .social-icon-list {
                 display: flex;
                 flex-direction: row;
-                
             }
-                .bi {
-                    margin-right: 8px;
-                }
+
+        .bi {
+            margin-right: 8px;
+        }
 
         .site-acknowledgement {
             margin-bottom: 16px;
@@ -177,11 +188,15 @@
                 @Html.ActionLink("Relocator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search products and catalogues">
-                    <svg onclick="search()" t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
-                </div>
-                @Html.Partial("_LoginPartial")
+                <ul class="nav navbar-nav navbar-right nav-button">
+                    <li>
+                        <div class="search-box">
+                            <input id="searchInput" type="text" placeholder="Search products and catalogues">
+                            <svg onclick="search()" t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
+                        </div>
+                    </li>
+                    @Html.Partial("_LoginPartial")
+                </ul>
             </div>
         </div>
     </div>
@@ -192,41 +207,42 @@
         <footer>
             <div class="nav-container container">
                 <div class="footer-section">
-
-                    <div class="site-intro">
-                        <div class="note">
-                            <div>
-                                Relocator!
-                            </div>
-                            <div>
-                                We're here to connect new and current students in UON to help them out in moving in and out
-                            </div>
-                        </div>
-
-                        <div class="connect">
-                            <div>
-                                Connect us on Socials
-                            </div>
-                            <div class="social-icon-list">
+                    <div class="footer-container">
+                        <div class="site-intro">
+                            <div class="note">
                                 <div>
-                                    <i class="bi bi-facebook"></i>
+                                    Relocator!
                                 </div>
                                 <div>
-                                    <i class="bi bi-instagram"></i>
+                                    We're here to connect new and current students in UON to help them out in moving in and out
                                 </div>
                             </div>
+
+                            <div class="connect">
+                                <div>
+                                    Connect us on Socials
+                                </div>
+                                <div class="social-icon-list">
+                                    <div>
+                                        <i class="bi bi-facebook"></i>
+                                    </div>
+                                    <div>
+                                        <i class="bi bi-instagram"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="site-acknowledgement">
+                            We acknowledge the Traditional Owners and Custodians of Country throughout Australia. We pay our respects to all First Nations peoples and acknowledge Elders past and present.
+                        </div>
+
+                        <div class="site-name">
+                            Relocator &copy; @DateTime.Now.Year | Student Based Application for UON students
                         </div>
 
                     </div>
-
-                    <div class="site-acknowledgement">
-                        We acknowledge the Traditional Owners and Custodians of Country throughout Australia. We pay our respects to all First Nations peoples and acknowledge Elders past and present.
-                    </div>
-
-                    <div class="site-name">
-                        Relocator &copy; @DateTime.Now.Year | Student Based Application for UON students
-                    </div>
-
 
                     <p></p>
                 </div>
