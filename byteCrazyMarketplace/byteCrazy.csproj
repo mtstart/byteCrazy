@@ -320,6 +320,8 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Content Include="Views\Home\List.cshtml" />
+    <Content Include="Views\Home\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
