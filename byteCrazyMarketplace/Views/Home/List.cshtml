@@ -34,146 +34,165 @@
 }
 
 <style>
-.select-box {
-    position: relative;
-}
-.select-box select {
-    background-color: #ebe9e9;
-    height: 31px;
-    border: none;
-    border-radius: 7px;
-    padding: 0 10px;
-    margin-right: 10px;
-}
-.search-button {
-    background-color: #009fe9;
-    color: white;
-    position: absolute;
-    right: 10px;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    line-height: 30px;
-    height: 30px;
-    padding: 0 15px;
-    border-radius: 18px;
-    cursor: pointer;
-}
-.select-box {
-    margin-bottom: 10px;
-}
-.card-list .card {
-    width: 320px;
-    float: left;
-    margin: 30px;
-    background-color: #f1e2e2;
-    padding: 10px;
-    cursor: pointer;
-    transition-duration: 0.5s;
-}
-.card-list .card img {
-    width: 300px;
-    height: 245px;
-    display: block;
-}
-.card-list .card p {
-    font-size: 18px;
-    margin-bottom: 0;
-    line-height: 32px;
-}
-.clear {
-    clear: both;
-}
-.card-list .card:hover {
-    transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
-}
-.select-box input {
-    background-color: #ebe9e9;
-    height: 31px;
-    border: none;
-    border-radius: 7px;
-    padding: 0 10px;
-    width: 80px;
-}
+    .select-box {
+        position: relative;
+    }
+
+        .select-box select {
+            background-color: #ebe9e9;
+            height: 31px;
+            border: none;
+            border-radius: 7px;
+            padding: 0 10px;
+            margin-right: 10px;
+        }
+
+    .search-button {
+        background-color: #009fe9;
+        color: white;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        line-height: 30px;
+        height: 30px;
+        padding: 0 15px;
+        border-radius: 18px;
+        cursor: pointer;
+    }
+
+    .select-box {
+        margin-bottom: 10px;
+    }
+    .card-list {
+    }
+
+        .card-list .card {
+            width: 300px;
+            height: 400px;
+            float: left;
+            /*            margin: 0px 24px 8px 0px;
+            padding: 18px 20px;*/
+            margin: 0px 24px 24px 0px;
+            cursor: pointer;
+            transition-duration: 0.5s;
+            background-color: #F0F1F3;
+        }
+
+        .card-list .card img {
+            width: 300px;
+            height: 245px;
+            display: block;
+        }
+
+        .card-list .card div {
+            padding: 8px 0px 0px 8px;
+        }
+
+        .card-list .card div p {
+            width: 300px;
+            max-height: 64px;
+            margin-bottom: 0px;
+
+            font-size: 18px;
+            line-height: 32px;
+            text-overflow: ellipsis;
+        }
+
+    .clear {
+        clear: both;
+    }
+
+    .card-list .card img:hover {
+        transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
+    }
+
+    .select-box input {
+        background-color: #ebe9e9;
+        height: 31px;
+        border: none;
+        border-radius: 7px;
+        padding: 0 10px;
+        width: 80px;
+    }
 </style>
 <h3 style=" margin-bottom: 20px; ">Search results for computer​</h3>
 <div class="select-box">
-<select name="Categories" id="Categories">
-    <option value="">Categories</option>
-    <option value="CAT001">Electronics</option>
-    <option value="CAT002">Clothing</option>
-    <option value="CAT003">Books</option>
-    <option value="CAT004">Home & Garden</option>
-    <option value="CAT005">Sports & Outdoors</option>
-</select>
-<select name="Latest" id="Latest">
-    <option value="">No filter</option>
-    <option value="Latest">Latest</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-    <option value="Categories">Categories</option>
-</select>
-<select name="Location" id="Location">
-    <option value="">Location</option>
-    <option value="New York">New York</option>
-    <option value="Los Angeles">Los Angeles</option>
-    <option value="Chicago">Chicago</option>
-    <option value="San Francisco">San Francisco</option>
-    <option value="Seattle">Seattle</option>
-    <option value="Boston">Boston</option>
-    <option value="Miami">Miami</option>
-    <option value="Denver">Denver</option>
-    <option value="Austin">Austin</option>
-    <option value="Portland">Portland</option>
-</select>
-<span>Price:</span>
-<input type="number" id="priceMin">
-<span>-</span>
-<input type="number" id="priceMax">
+    <select name="Categories" id="Categories">
+        <option value="">Categories</option>
+        <option value="CAT001">Electronics</option>
+        <option value="CAT002">Clothing</option>
+        <option value="CAT003">Books</option>
+        <option value="CAT004">Home & Garden</option>
+        <option value="CAT005">Sports & Outdoors</option>
+    </select>
+    <select name="Latest" id="Latest">
+        <option value="">No filter</option>
+        <option value="Latest">Latest</option>
+        <option value="Categories">Categories</option>
+        <option value="Categories">Categories</option>
+    </select>
+    <select name="Location" id="Location">
+        <option value="">Location</option>
+        <option value="New York">New York</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="Chicago">Chicago</option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="Seattle">Seattle</option>
+        <option value="Boston">Boston</option>
+        <option value="Miami">Miami</option>
+        <option value="Denver">Denver</option>
+        <option value="Austin">Austin</option>
+        <option value="Portland">Portland</option>
+    </select>
+    <span>Price:</span>
+    <input type="number" id="priceMin">
+    <span>-</span>
+    <input type="number" id="priceMax">
 
-<div class="search-button" onclick="Search()">Search</div>
+    <div class="search-button" onclick="Search()">Search</div>
 </div>
 <div class="card-list">
 </div>
 <script>
-function selectCard(id) {
-    location.href = '/Home/Info?productID=' + id
-}
+    function selectCard(id) {
+        location.href = '/Home/Info?productID=' + id
+    }
+
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+    let tempHtml = ``
+
+    dataList.forEach(element => {
+        tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
+            <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
+            <div>
+                <p>${element.description}​</p>
+                <p>$${element.price}​</p>
+                <p>${element.location} | ${element.title}​</p>
+            </div>
+        </div>`
+        document.querySelector('.card-list').innerHTML = tempHtml + `<div class="clear"></div>`
+    });
+
+    function Search () {
+        let resultsUrl = '/Home/List?'
+        if (window.Categories.value) {
+            resultsUrl += "categoryID=" + window.Categories.value + '&'
+        }
+        if (window.Location.value) {
+            resultsUrl += "Location=" + window.Location.value + '&'
+        }
+        if (window.priceMin.value) {
+            resultsUrl += "priceMin=" + window.priceMin.value + '&'
+        }
+        if (window.priceMax.value) {
+            resultsUrl += "priceMax=" + window.priceMax.value + '&'
+        }
+        location.href = resultsUrl
+    }
 </script>
-<script>
-let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
-let tempHtml = ``
-dataList.forEach(element => {
-    tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
-        <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
-        <p>${element.description}​</p>
-        <p>${element.price}​$​</p>
-        <p>${element.location} | ${element.title}​</p>
-    </div>`
-    document.querySelector('.card-list').innerHTML = tempHtml + `<div class="clear"></div>`
-});
-function Search () {
-    let resultsUrl = '/Home/List?'
-    if (window.Categories.value) {
-        resultsUrl += "categoryID=" + window.Categories.value + '&'
-    }
-    if (window.Location.value) {
-        resultsUrl += "Location=" + window.Location.value + '&'
-    }
-    if (window.priceMin.value) {
-        resultsUrl += "priceMin=" + window.priceMin.value + '&'
-    }
-    if (window.priceMax.value) {
-        resultsUrl += "priceMax=" + window.priceMax.value + '&'
-    }
-    location.href = resultsUrl
-}
-</script>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

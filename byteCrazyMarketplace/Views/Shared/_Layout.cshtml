@@ -84,6 +84,7 @@
             right: 16px;
             top: 13px;
             fill: #646e77;
+            cursor: pointer;
         }
 
         .nav-button {
@@ -94,8 +95,17 @@
                 color: #d5ecfa;
             }
 
+
+        .nav-button-text {
+            border-bottom: solid 4px transparent;
+        }
+
+            .nav-button-text:hover {
+                border-bottom: solid 4px #d5ecfa;
+            }
+
         .navbar-inverse .navbar-nav > li > a:hover {
-            color: black;
+            color: #9d9d9d;
         }
 
         .navbar-toggle {
@@ -107,11 +117,9 @@
         }
 
             .icon-bar:hover {
-                border: solid 1px red;
             }
 
             .icon-bar:focus {
-                border: solid 1px red;
                 background-color: white !important;
             }
 
@@ -128,12 +136,15 @@
             padding: 20px 0px;
             color: #07065C;
         }
+            .footer-container {
+                width: 90%;
+                align-self: center;
+            }
 
         .site-intro {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             margin-bottom: 16px;
-
             font-weight: bold;
         }
 
@@ -145,11 +156,11 @@
             .site-intro .connect .social-icon-list {
                 display: flex;
                 flex-direction: row;
-                
             }
-                .bi {
-                    margin-right: 8px;
-                }
+
+        .bi {
+            margin-right: 8px;
+        }
 
         .site-acknowledgement {
             margin-bottom: 16px;
@@ -196,41 +207,42 @@
         <footer>
             <div class="nav-container container">
                 <div class="footer-section">
-
-                    <div class="site-intro">
-                        <div class="note">
-                            <div>
-                                Relocator!
-                            </div>
-                            <div>
-                                We're here to connect new and current students in UON to help them out in moving in and out
-                            </div>
-                        </div>
-
-                        <div class="connect">
-                            <div>
-                                Connect us on Socials
-                            </div>
-                            <div class="social-icon-list">
+                    <div class="footer-container">
+                        <div class="site-intro">
+                            <div class="note">
                                 <div>
-                                    <i class="bi bi-facebook"></i>
+                                    Relocator!
                                 </div>
                                 <div>
-                                    <i class="bi bi-instagram"></i>
+                                    We're here to connect new and current students in UON to help them out in moving in and out
                                 </div>
                             </div>
+
+                            <div class="connect">
+                                <div>
+                                    Connect us on Socials
+                                </div>
+                                <div class="social-icon-list">
+                                    <div>
+                                        <i class="bi bi-facebook"></i>
+                                    </div>
+                                    <div>
+                                        <i class="bi bi-instagram"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="site-acknowledgement">
+                            We acknowledge the Traditional Owners and Custodians of Country throughout Australia. We pay our respects to all First Nations peoples and acknowledge Elders past and present.
+                        </div>
+
+                        <div class="site-name">
+                            Relocator &copy; @DateTime.Now.Year | Student Based Application for UON students
                         </div>
 
                     </div>
-
-                    <div class="site-acknowledgement">
-                        We acknowledge the Traditional Owners and Custodians of Country throughout Australia. We pay our respects to all First Nations peoples and acknowledge Elders past and present.
-                    </div>
-
-                    <div class="site-name">
-                        Relocator &copy; @DateTime.Now.Year | Student Based Application for UON students
-                    </div>
-
 
                     <p></p>
                 </div>

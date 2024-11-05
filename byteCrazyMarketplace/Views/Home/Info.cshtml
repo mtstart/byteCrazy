@@ -9,7 +9,9 @@
         // 示例查询
         string productID = Request.QueryString["productID"];
         string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [productID] = @productID";
-        IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID});
+        sql = "select aspnetusers.username, category.title as 'category', product.* from product inner join aspnetusers on product.sellerID = aspnetusers.Id inner join category \r\n\ton product.categoryID = Category.categoryID\r\nwhere product.productID = @productID";
+
+        IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID });
         ViewBag.dataTemp = JsonConvert.SerializeObject(results);
     }
 }
@@ -18,6 +20,7 @@
         width: 100%;
         height: 100%;
     }
+
     .mySwiper {
     }
 
@@ -25,27 +28,86 @@
         width: 680px;
         height: 430px;
     }
+
     .to-box {
         display: flex;
         justify-content: space-between;
     }
-    .card-box p {
-        font-size: 18px;
-        line-height: 30px;
+
+    .product-card {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 60px;
     }
-    .card-box h3 {
-        margin-top: 0;
-    }
+
+        .product-image-section {
+            width: 50%;
+        }
+            .product-image-section img {
+                width: 100%;
+                object-fit: fill;
+                pointer-events: none;
+                user-select: none;
+            }
+
+        .product-info-section {
+            width: 50%;
+            margin-left: 18px;
+        }
+            .product-info-section > .seller-info {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                font-size: large;
+            }
+                .product-info-section > .seller-info > .user-icon > i {
+                    color: #8a8aa1;
+                    font-size: xx-large;
+                }
+                .product-info-section > .seller-info > .icon-function-list {
+                    margin-left: auto;
+                }
+                    .product-info-section > .seller-info > .icon-function-list button {
+                        background-color: transparent;
+                        font-size: large;
+                        padding: 0px 8px !important;
+                    }
+                    .product-info-section > .seller-info > .icon-function-list button:hover {
+                        color: #009fe9;
+                    }
+
+            .product-info-section > .product-title > .name {
+                font-size: large;
+            }
+            .product-info-section > .product-title > .description {
+                margin-top: 20px;
+                max-height: 200px;
+                overflow-y: auto;
+            }
+
+            .product-info-section > .product-purchase {
+                padding-top: 20px;
+            }
+
+                .product-info-section > .product-purchase button:hover {
+                    background-color: aliceblue;
+                }
+
+
     p.detailed, textarea.detailed {
         background-color: #f9f7f7;
         padding: 20px;
-        weight: 100%;
-    }
-    p.detailed img {
-        display: block;
         width: 100%;
-        margin: auto;
     }
+
+        p.detailed img {
+            display: block;
+            width: 100%;
+            margin: auto;
+        }
+
     .edit-box {
         height: 40px;
         display: flex;
@@ -53,13 +115,15 @@
         justify-content: end;
         margin-bottom: 10px;
     }
-    .edit-box button {
-        background-color: #009fe9;
-        border: none;
-        color: white;
-        border-radius: 5px;
-        margin-left: 5px;
-    }
+
+        .edit-box button {
+            background-color: #009fe9;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
     .editing {
         border: 1px solid #8a8aa1;
     }
@@ -67,86 +131,80 @@
 <link rel="stylesheet" href="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.css" />
 <!-- Swiper JS -->
 <script src="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.js"></script>
-<h3 style=" margin-bottom: 20px;color: #009fe9;font-weight: bold; ">Awesome Budget 1080p Gaming PC​</h3>
-<div class="edit-box"><button>Edit</button><button>Collect</button><button>Save</button></div>
-<div class="to-box" style="">
-    <div class="swiper-box" style=" position: relative; ">
-        <div class="swiper mySwiper" style="">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/1.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/2.webp"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/3.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/4.jpg"></div>
-                <div class="swiper-slide"><img src="https://cunchu.site/temp/byteCrazy/5.webp"></div>
-            </div>
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-    <div class="card-box">
-        <h3>Awesome Budget 1080p Gaming PC</h3>
-        <p>Purchase/Manufacture Year: 2019<br>
-Category: Vehicle<br>
-Release time: 2024/10/21<br>
-Publisher: Anna<br>
-Number of Followers: 16<br>
-Original Price: $16,000<br>
-Current Price: $6,000</p>
-    </div>
-    
-</div>
-<h2 style=" color: #5555c9; font-weight: bold; line-height: 44px; ">Detailed Introduction</h2>
-<div class="edit-box"><button onclick="edit()">Edit</button></div>
-<p class="detailed">
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-<img src="https://cunchu.site/temp/byteCrazy/1.jpg">
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-Here is a detailed introduction<br>
-</p>
 
-    <!-- Initialize Swiper -->
-    <script>
-        var swiper = new Swiper(".mySwiper", {
+<div class="to-box" style="">
+    
+    <div class="product-card">
+        <div class="product-image-section">
+            <img src="https://cunchu.site/temp/byteCrazy/1.jpg">
+        </div>
+        <div class="product-info-section">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper(".mySwiper", {
         pagination: {
             el: ".swiper-pagination",
             loop: true,
             autoplay:true
         },
-        });
-        function edit () {
-            document.querySelector('.detailed').setAttribute('contenteditable', "")
-            document.querySelector('.detailed').classList.add('editing')
-        }
-    </script>
-</div>
-<script>
-let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
-dataList = dataList[0]
-document.querySelector('.card-box').innerHTML = `<h3>${dataList.title}</h3>
-        <p>Purchase/Manufacture Year: ${dataList.postedDate}<br>
-Category: ${dataList.categoryID}<br>
-Release time: ${dataList.purchaseDate}<br>
-Publisher: ${dataList.sellerID}<br>
-Number of Followers: 16<br>
-Current Price: ${dataList.price}</p>`
+    });
+
+    function edit () {
+        document.querySelector('.detailed').setAttribute('contenteditable', "")
+        document.querySelector('.detailed').classList.add('editing')
+    }
+
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+
+    dataList = dataList[0]
+    document.querySelector('.product-info-section').innerHTML
+        = `<div class="seller-info">
+                <div class="user-icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="user-name">
+                    ${dataList.username}
+                </div>
+                <div class="icon-function-list">
+                    <button class="btn" onclick="edit()" data-toggle="tooltip" data-placement="top" title="Edit Product">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button class="btn" data-toggle="tooltip" data-placement="top" title="Save Product">
+                        <i class="bi bi-bookmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="product-title">
+                <div class="name">
+                    ${dataList.title}
+                </div>
+                <div class="category">
+                    ${dataList.category}
+                </div>
+                <div class="price">
+                    $${dataList.price}
+                </div>
+                <div class="location">
+                    ${dataList.location} | 3km from you
+                </div>
+                <div class="description detailed">
+                    ${dataList.description} Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.
+                    Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.
+                </div>
+            </div>
+            <div class="product-purchase">
+                <button type="button" id="purchaseButton" class="btn btn-outline-primary">Contact Buyer for Purchase</button>
+            </div>
+            `
+            //Purchase/Manufacture Year: ${dataList.postedDate}<br>
+            //Release time: ${dataList.purchaseDate}<br>
+            //Number of Followers: 16<br>
 </script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
