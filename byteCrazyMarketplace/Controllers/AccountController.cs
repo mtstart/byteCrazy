@@ -82,26 +82,6 @@ namespace byteCrazy.Controllers
             return View();
         }
 
-
-        //
-        // GET: /Account/Home
-        [AllowAnonymous]
-        public ActionResult Home(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-        //
-        // GET: /Account/List
-        [AllowAnonymous]
-        public ActionResult List(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-
         //
         // POST: /Account/Login
         [HttpPost]
@@ -142,7 +122,9 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
+
     };
             return View();
         }
@@ -203,7 +185,8 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
     };
         }
 
