@@ -21,6 +21,11 @@ namespace byteCrazy.Interface
 
         // 获取所有产品信息
         void GetAllPostedProducts();
+
+        // 获取对应产品信息
+        //Task<AdminListModels>  SearchProdunct(string productId);
+        AdminListModels SearchProdunct(string productId);
+
         // 获取待验证的帖子列表
         Task<IEnumerable<AdminListModels>> GetPendingListingsAsync(int page = 1, int pageSize = 20);
 
@@ -63,10 +68,10 @@ namespace byteCrazy.Interface
 
     public enum ListingStatus
     {
-        Pending,
-        Active,
-        Rejected,
-        Sold
+        pending,
+        active,
+        rejected,
+        sold
     }
 
     public class ListingStats

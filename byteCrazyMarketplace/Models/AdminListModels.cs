@@ -35,6 +35,7 @@ namespace byteCrazy.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
+
         [Required]
         public string SellerId { get; set; }
 
@@ -47,7 +48,6 @@ namespace byteCrazy.Models
 
         [Required]
         public string StatusString { get; set; }
-
 
         //[Required]
         //public ListingStatus Status { get; set; }
@@ -65,7 +65,7 @@ namespace byteCrazy.Models
                 else
                 {
                     // 处理未知状态，例如返回默认值
-                    return ListingStatus.Pending; // 可以根据需求调整
+                    return ListingStatus.pending; // 可以根据需求调整
                 }
             }
             set
@@ -108,13 +108,13 @@ namespace byteCrazy.Models
         public AdminListModels()
         {
             CreatedAt = DateTime.Now;
-            Status = ListingStatus.Pending;
+            Status = ListingStatus.pending;
             ViewCount = 0;
         }
 
         public void Verify(string adminId)
         {
-            Status = ListingStatus.Active;
+            Status = ListingStatus.active;
             VerifiedBy = adminId;
             VerifiedAt = DateTime.Now;
             LastModifiedAt = DateTime.Now;
@@ -123,7 +123,7 @@ namespace byteCrazy.Models
 
         public void Reject(string adminId, string reason)
         {
-            Status = ListingStatus.Rejected;
+            Status = ListingStatus.rejected;
             VerifiedBy = adminId;
             VerifiedAt = DateTime.Now;
             RejectionReason = reason;
@@ -133,7 +133,7 @@ namespace byteCrazy.Models
 
         public void MarkAsSold()
         {
-            Status = ListingStatus.Sold;
+            Status = ListingStatus.sold;
             SoldAt = DateTime.Now;
             LastModifiedAt = DateTime.Now;
         }
@@ -157,7 +157,7 @@ namespace byteCrazy.Models
 
         public bool CanBeEditedBy(string userId)
         {
-            return SellerId == userId && Status != ListingStatus.Sold;
+            return SellerId == userId && Status != ListingStatus.sold;
         }
     }
 

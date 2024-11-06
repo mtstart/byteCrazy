@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.Services.Description;
+using System.Xml.Linq;
 using byteCrazy.Interface;
 using byteCrazy.Models;
 
@@ -16,17 +18,14 @@ namespace byteCrazy.Controllers
 
         public AdminController()
         {
-            // 这里可以使用一个默认的实现，或者留空
-            // 注意：这不是最佳实践，但可以帮助你暂时解决错误
             _listingManagementServiceInterface = new AdminListMangementService(new ApplicationDbContext());
-            
+            _listingManagementServiceInterface.GetAllPostedProducts();
+
         }
 
         public ActionResult Index()
         {
             System.Diagnostics.Debug.WriteLine("Admin Index method called");
-
-            _listingManagementServiceInterface.GetAllPostedProducts();
 
             var viewModel = new AdminDashboardModels
             {
@@ -46,33 +45,23 @@ namespace byteCrazy.Controllers
 
         public async Task<ActionResult> PendingListings()
         {
-            return View("AdminPendingLists", _listingManagementServiceInterface.pendings);
+            return View("AdminTotalLists", _listingManagementServiceInterface.pendings);
         }
 
         public async Task<ActionResult> ActiveListings()
         {
-            return View("AdminPendingLists", _listingManagementServiceInterface.actives);
+            return View("AdminTotalLists", _listingManagementServiceInterface.actives);
         }
 
-        public async Task<ActionResult> ViewDetails()
+        public async Task<ActionResult> SoldItems()
         {
-            AdminListModels model = new AdminListModels
-            {
-                ProductID = "2",
-                Title = "M2",
-                Price = 800.50m,
-                Description = "That's very good",
-                SellerName = "Jane Smith",
-                CreatedAt = DateTime.Now.AddDays(-1),
-                Location = "Newcastle",
-                Category = "Digtal",
-                ImageUrls = new List<string> {
-                        "https://cunchu.site/temp/byteCrazy/1.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg",
-                        "https://cunchu.site/temp/byteCrazy/4.jpg"}
-            };
+            return View("AdminTotalLists", _listingManagementServiceInterface.solds);
+        }
+
+        public async Task<ActionResult> ViewDetails(string id)
+        {
+            Console.WriteLine($"Hello, {id}!");
+            AdminListModels model = _listingManagementServiceInterface.SearchProdunct(id);
             return View("AdminVerifyLists", model);
         }
 
@@ -93,11 +82,7 @@ namespace byteCrazy.Controllers
        
         }
 
-        public async Task<ActionResult> SoldItems()
-        {
-            var soldItems = await _listingManagementServiceInterface.GetSoldItemsAsync();
-            return View(soldItems);
-        }
+        
 
     }
 }

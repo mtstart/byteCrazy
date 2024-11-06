@@ -50,7 +50,7 @@
                 <td>@listing.CreatedAt.ToShortDateString()</td>
                 <td>@listing.StatusString</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="viewDetails(@listing.ProductID)">View Details</button>
+                    <button class="btn btn-primary btn-sm" onclick="viewDetails('@listing.ProductID')">View Details</button>
                 </td>
             </tr>
         }
@@ -61,18 +61,18 @@
     function approveListing(id) {
         // Implement approval logic
         console.log('Approve listing:', id);
-        window.location.href = '@Url.Action("ActiveListings", "Admin")';
+        window.location.href = '@Url.Action("ActiveListings", "Admin")' + "?id=" + id;
     }
 
     function rejectListing(id) {
         // Implement rejection logic
         console.log('Reject listing:', id);
-        window.location.href = '@Url.Action("PendingListings", "Admin")';
+        window.location.href = '@Url.Action("PendingListings", "Admin")' + "?id=" + id;
     }
 
     function viewDetails(id) {
         // Implement view details logic
         console.log('View details for listing:', id);
-        window.location.href = '@Url.Action("ViewDetails", "Admin")';
+         window.location.href = '@Url.Action("ViewDetails", "Admin")' + "?id=" + id;
     }
 </script>

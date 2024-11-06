@@ -66,7 +66,7 @@ namespace byteCrazy.Interface
                         {
                             var product = new AdminListModels
                             {
-                                UserID = reader["sellerId"].ToString(),
+                                UserID = reader["sellerID"].ToString(),
                                 Title = reader["title"].ToString(),
                                 ProductID = reader["productID"].ToString(),
                                 CreatedAt = Convert.ToDateTime(reader["postedDate"]),
@@ -78,14 +78,16 @@ namespace byteCrazy.Interface
 
                             switch (product.Status)
                             {
-                                case ListingStatus.Sold:
+                                case ListingStatus.sold:
                                     solds.Add(product);
                                     break;
-                                case ListingStatus.Active:
+                                case ListingStatus.active:
+                                    actives.Add(product);
+                                    break;
+                                case ListingStatus.pending:
                                     actives.Add(product);
                                     break;
                                 default:
-                                    pendings.Add(product);
                                     break;
                             }
 
@@ -95,10 +97,49 @@ namespace byteCrazy.Interface
             }
         }
 
+        //SearchProdunct
+        public AdminListModels SearchProdunct(string productId)
+        {
+            AdminListModels model = new AdminListModels();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM Product WHERE ProductID = @ProductID";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ProductID", productId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            model = new AdminListModels
+                            {
+                                UserID = reader["sellerID"].ToString(),
+                                Title = reader["title"].ToString(),
+                                ProductID = reader["productID"].ToString(),
+                                Location = reader["location"].ToString(),
+                                //Category = reader["category"].ToString(),
+                                Description = reader["description"].ToString(),
+                                Price = Convert.ToDecimal(reader["price"]),
+                                CreatedAt = Convert.ToDateTime(reader["postedDate"]),
+                                StatusString = reader["status"].ToString(),
+                                ImageUrls = new List<string> { reader["imgUrl"].ToString() }
+                            };
+                        }
+                    }
+                }
+            }
+
+            return model;
+        }
+
         public async Task<IEnumerable<AdminListModels>> GetPendingListingsAsync(int page = 1, int pageSize = 20)
         {
             return await _context.Listings
-                .Where(l => l.Status == ListingStatus.Pending)
+                .Where(l => l.Status == ListingStatus.pending)
                 .OrderByDescending(l => l.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -108,7 +149,7 @@ namespace byteCrazy.Interface
         public async Task<IEnumerable<AdminListModels>> GetSoldItemsAsync(int page = 1, int pageSize = 20)
         {
             return await _context.Listings
-                .Where(l => l.Status == ListingStatus.Sold)
+                .Where(l => l.Status == ListingStatus.sold)
                 .OrderByDescending(l => l.SoldAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -164,10 +205,10 @@ namespace byteCrazy.Interface
             var stats = new ListingStats
             {
                 TotalListings = await _context.Listings.CountAsync(),
-                PendingVerification = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Pending),
-                ActiveListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Active),
-                SoldListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Sold),
-                RejectedListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.Rejected)
+                PendingVerification = await _context.Listings.CountAsync(l => l.Status == ListingStatus.pending),
+                ActiveListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.active),
+                SoldListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.sold),
+                RejectedListings = await _context.Listings.CountAsync(l => l.Status == ListingStatus.rejected)
             };
 
             return stats;
