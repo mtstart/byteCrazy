@@ -1,0 +1,178 @@
+@model byteCrazy.Models.UserCenterViewModel
+@{
+    ViewData["Title"] = "User Center";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        .header {
+            background-color: #e6f3ff;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .nav {
+            position: absolute;
+            right: 20px;
+            bottom: 10px; /* ������ֵ�Խ���ť�����ƶ� */
+        }
+
+            .nav a {
+                margin-left: 20px;
+                text-decoration: none;
+                color: #333;
+            }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .box {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+            .box h2 {
+                margin-top: 0;
+                color: #666;
+                text-transform: capitalize; /* ȷ������ĸ��д */
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-transform: capitalize; /* ȷ������ĸ��д */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        User Center
+        <div class="nav">
+            <a href="@Url.Action("Index", "Home")">Home</a>
+            <a href="@Url.Action("Login", "Account")">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <h2>Saved Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.SavedProducts)
+                    {
+                        <tr>
+                            <td>@product.Title</td>
+                            <td>@product.Price</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="box">
+            <h2>Purchased Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Purchase Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.PurchasedProducts)
+                    {
+                        <tr>
+                            <td>@product.Title</td>
+                            <td>@product.Price</td>
+                            <td>@product.PurchaseDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="box">
+            <h2>Uploaded Products</h2>
+            <h3>On Sale</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.PublishedProductsOnSale)
+                    {
+                        <tr>
+                            <td>@product.Title</td>
+                            <td>@product.Price</td>
+                            <td>@product.Location</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h3>Sold</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Purchase Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.PublishedProductsSold)
+                    {
+                        <tr>
+                            <td>@product.Title</td>
+                            <td>@product.Price</td>
+                            <td>@product.PurchaseDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
