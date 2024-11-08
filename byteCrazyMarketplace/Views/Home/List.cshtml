@@ -98,6 +98,7 @@
             font-size: 18px;
             line-height: 32px;
             text-overflow: ellipsis;
+            overflow: hidden;
         }
 
     .clear {
@@ -165,7 +166,7 @@
 
     dataList.forEach(element => {
         tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
-            <img src="https://cunchu.site/temp/byteCrazy/3.jpg">
+            <img src="${element.imgUrl}">
             <div>
                 <p>${element.description}​</p>
                 <p>$${element.price}​</p>
