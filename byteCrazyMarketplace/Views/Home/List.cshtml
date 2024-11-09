@@ -161,7 +161,7 @@
         location.href = '/Home/Info?productID=' + id
     }
 
-    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'))
     let tempHtml = ``
 
     dataList.forEach(element => {
