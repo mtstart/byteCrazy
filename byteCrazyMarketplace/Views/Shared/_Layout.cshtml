@@ -263,4 +263,21 @@
         }
     </script>
 </body>
+<!-- Customer Service Chat -->
+<script>
+    (function(d,t) {
+    var BASE_URL="https://app.voxsig.com";
+    var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=BASE_URL+"/packs/js/sdk.js";
+    g.defer = true;
+    g.async = true;
+    s.parentNode.insertBefore(g,s);
+    g.onload=function(){
+        window.chatwootSDK.run({
+        websiteToken: 'x3oRrK5bnLG4ZC5ancan77zU',
+        baseUrl: BASE_URL
+        })
+    }
+    })(document,"script");
+</script>
 </html>
