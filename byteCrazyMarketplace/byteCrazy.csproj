@@ -288,6 +288,14 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\sammy-0.7.5.js" />
     <Content Include="Scripts\sammy-0.7.5.min.js" />
+    <Content Include="UploadedImages\22.png" />
+    <Content Include="UploadedImages\23.png" />
+    <Content Include="UploadedImages\24.png" />
+    <Content Include="UploadedImages\25.png" />
+    <Content Include="UploadedImages\26.png" />
+    <Content Include="UploadedImages\27.png" />
+    <Content Include="UploadedImages\3.jpg" />
+    <Content Include="UploadedImages\5f886af8-73bc-4890-be1d-c1eee89f4149_thumbnail.jpg" />
     <Content Include="Views\Home\Info.cshtml" />
     <Content Include="Views\Home\List.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -333,6 +341,7 @@
     <Content Include="Views\Admin\AdminVerifyLists.cshtml" />
     <Content Include="Views\Admin\AdminTotalLists.cshtml" />
     <Content Include="Views\Account\UserCenter.cshtml" />
+    <Content Include="UploadedImages\11.webp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
