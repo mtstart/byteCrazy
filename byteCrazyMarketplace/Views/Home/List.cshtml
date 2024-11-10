@@ -4,6 +4,8 @@
 @using System.Data.SqlClient
 @{
     ViewBag.Title = "byteCrazy";
+    string searchKeyword = "";
+
     using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;")) {
         connection.Open();
         // 示例查询
@@ -13,6 +15,8 @@
         string priceMax = Request.QueryString["priceMax"];
         string description = Request.QueryString["description"];
         string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [status] = 'active'";
+        searchKeyword = description;
+
         if (!string.IsNullOrEmpty(categoryStr)) {
             sql = sql + " AND [categoryID] = @categoryID";
         }
@@ -118,7 +122,7 @@
         width: 80px;
     }
 </style>
-<h3 style=" margin-bottom: 20px; ">Search results for computer​</h3>
+<h3 style=" margin-bottom: 20px; ">Search results for @searchKeyword</h3>
 <div class="select-box">
     <select name="Categories" id="Categories">
         <option value="">Categories</option>
