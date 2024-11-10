@@ -20,7 +20,7 @@
     using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;"))
     {
         connection.Open();
-        // 示例查询
+
         string categoryStr = Request.QueryString["categoryID"];
         string Location = Request.QueryString["Location"];
         string priceMin = Request.QueryString["priceMin"];
@@ -36,7 +36,7 @@
         }
         if (!string.IsNullOrEmpty(Location))
         {
-            sql = sql + " AND [location] = @Location";
+            sql = sql + " AND [location] = @location";
         }
         if (!string.IsNullOrEmpty(priceMin))
         {
@@ -54,32 +54,57 @@
         {
             sql = sql + " order by " + latest;
         }
-        IEnumerable<dynamic> results = connection.Query(sql, new { categoryID = categoryStr, Location = Location, priceMin = priceMin, priceMax = priceMax });
+        IEnumerable<dynamic> results = connection.Query(sql, new { categoryID = categoryStr, location = Location, priceMin = priceMin, priceMax = priceMax });
         ViewBag.dataTemp = JsonConvert.SerializeObject(results);
     }
 }
 
 <style>
-    .select-box {
-        position: relative;
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-        .select-box select {
+    .page-title {
+        margin-bottom: 20px;
+        font-size: x-large;
+    }
+    .select-box {
+        margin-bottom: 10px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .select-box select, input {
             background-color: #ebe9e9;
             height: 31px;
             border: none;
             border-radius: 7px;
             padding: 0 10px;
-            margin-right: 10px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+
+        .select-box input {
+            width: 80px;
+        }
+
+        .select-box button {
+            height: 31px;
+        }
+
+        .select-box button {
+            margin-left: 20px;
+        }
+
+        .select-box .price-section input {
+            margin-left: 4px;
+            margin-right: 4px;
         }
 
     .search-button {
         background-color: #009fe9;
         color: white;
-    }
-
-    .select-box {
-        margin-bottom: 10px;
     }
 
     .seach-results {
@@ -95,8 +120,6 @@
             width: 300px;
             height: 400px;
             float: left;
-            /*            margin: 0px 24px 8px 0px;
-            padding: 18px 20px;*/
             margin: 0px 24px 24px 0px;
             cursor: pointer;
             transition-duration: 0.5s;
@@ -127,20 +150,22 @@
         clear: both;
     }
 
+    #search-result-none {
+        display: none;
+        margin-bottom: 100px;
+    }
+        #search-result-none .title {
+            font-size: large;
+        }
+        #search-result-none .description {
+            font-size: larger;
+        }
+
     .card-list .card img:hover {
         transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
     }
-
-    .select-box input {
-        background-color: #ebe9e9;
-        height: 31px;
-        border: none;
-        border-radius: 7px;
-        padding: 0 10px;
-        width: 80px;
-    }
 </style>
-<h3 style=" margin-bottom: 20px; ">Search results for @searchKeyword</h3>
+<div class="page-title">Search results for @searchKeyword</div>
 <div class="select-box">
     <select name="Categories" id="Categories">
         <option value="">Categories</option>
@@ -158,26 +183,35 @@
         <option value="price asc">Price Low to High</option>
         <option value="price desc">Price High to Low</option>
     </select>
-    <select name="Location" id="Location">
+    <select name="Location" id="Locations">
         <option value="">Location</option>
-        <option value="New York">New York</option>
-        <option value="Los Angeles">Los Angeles</option>
-        <option value="Chicago">Chicago</option>
-        <option value="San Francisco">San Francisco</option>
-        <option value="Seattle">Seattle</option>
-        <option value="Boston">Boston</option>
-        <option value="Miami">Miami</option>
-        <option value="Denver">Denver</option>
-        <option value="Austin">Austin</option>
-        <option value="Portland">Portland</option>
+        <option value="Newcastle">Newcastle</option>
+        <option value="Hamilton">Hamilton</option>
+        <option value="Cooks Hill">Cooks Hill</option>
+        <option value="Merewether">Merewether</option>
+        <option value="Islington">Islington</option>
+        <option value="Broadmeadow">Broadmeadow</option>
+        <option value="Adamstown">Adamstown</option>
+        <option value="Stockton">Stockton</option>
+        <option value="Waratah">Waratah</option>
+        <option value="Charlestown">Charlestown</option>
+        <option value="Others">Others</option>
     </select>
+    <div class="price-section">
+        Price:<input type="number" id="priceMin">-<input type="number" id="priceMax">
+    </div>
+    <button class="btn btn-primary search-button" onclick="Search()" title="Search">Search</button>
+    <button class="btn btn-outline-primary" onclick="ClearFilter()" title="Clear">Clear Filter</button>
 
-    <span>Price:</span>
-    <input type="number" id="priceMin">
-    <span>-</span>
-    <input type="number" id="priceMax">
-    <button class="btn search-button" onclick="Search()" title="Search">Search</button>
+</div>
 
+<div id="search-result-none">
+    <div class="title">
+        No results
+    </div>
+    <div class="description">
+        Sorry, we couldn't find anything that fit your search.
+    </div>
 </div>
 
 <div class="seach-results">
@@ -190,8 +224,12 @@
         location.href = '/Home/Info?productID=' + id
     }
 
-    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'))
-    let tempHtml = ``
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'));
+    let tempHtml = ``;
+
+    if (dataList.length == 0) {
+        document.getElementById("search-result-none").style = "display: block;";
+    }
 
     dataList.forEach(element => {
         tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
@@ -205,13 +243,19 @@
         document.querySelector('.card-list').innerHTML = tempHtml
     });
 
-    function Search () {
+    function ClearFilter() {
         let resultsUrl = '/Home/List?'
+        location.href = resultsUrl;
+    }
+
+    function Search () {
+        let resultsUrl = '/Home/List?';
+
         if (window.Categories.value) {
             resultsUrl += "categoryID=" + window.Categories.value + '&'
         }
-        if (window.Location.value) {
-            resultsUrl += "Location=" + window.Location.value + '&'
+        if (window.Locations.value) {
+            resultsUrl += "Location=" + window.Locations.value + '&'
         }
         if (window.priceMin.value) {
             resultsUrl += "priceMin=" + window.priceMin.value + '&'
@@ -222,7 +266,8 @@
         if (window.Latest.value) {
             resultsUrl += "Latest=" + window.Latest.value + '&'
         }
-        location.href = resultsUrl
+
+        location.href = resultsUrl;
     }
 </script>
 
