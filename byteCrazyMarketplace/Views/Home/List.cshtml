@@ -82,7 +82,13 @@
         margin-bottom: 10px;
     }
 
+    .seach-results {
+        display: flex;
+        justify-content: center;
+    }
+
     .card-list {
+        max-width: 980px;
     }
 
         .card-list .card {
@@ -173,8 +179,12 @@
     <button class="btn search-button" onclick="Search()" title="Search">Search</button>
 
 </div>
-<div class="card-list">
+
+<div class="seach-results">
+    <div class="card-list">
+    </div>
 </div>
+<div class="clear"></div>
 <script>
     function selectCard(id) {
         location.href = '/Home/Info?productID=' + id
@@ -192,7 +202,7 @@
                 <p>${element.location} | ${element.title}​</p>
             </div>
         </div>`
-        document.querySelector('.card-list').innerHTML = tempHtml + `<div class="clear"></div>`
+        document.querySelector('.card-list').innerHTML = tempHtml
     });
 
     function Search () {
