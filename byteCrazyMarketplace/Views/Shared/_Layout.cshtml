@@ -65,6 +65,11 @@
             height: 5px;
         }
 
+        .navbar-header-right {
+            max-width: 700px;
+            margin-left: auto !important;
+        }
+
         .search-box {
             /*            position: absolute;
             right: 125px;*/
@@ -203,7 +208,7 @@
                 </button>
                 @Html.ActionLink("Relocator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse" style="max-width: 500px; margin-left: auto;">
+            <div class="navbar-collapse collapse navbar-header-right" style="">
                 <ul class="nav navbar-nav navbar-right nav-button">
                     <li>
                         <div class="search-box">
