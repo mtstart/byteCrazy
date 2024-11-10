@@ -16,8 +16,11 @@
             padding-bottom: 0px;
         }
 
+        .nav-menu-button {
+            background-color: #07065C !important;
+        }
+
         .navbar-inverse .navbar-brand {
-            color: rgb(27 142 205);
             font-size: 30px;
             font-weight: bold;
             /*            color: #0a0878;*/
@@ -180,21 +183,21 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="nav-container container top-nav-section">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button type="button" class="navbar-toggle nav-menu-button" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Relocator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse" style="max-width: 500px; margin-left: auto;">
                 <ul class="nav navbar-nav navbar-right nav-button">
                     <li>
                         <div class="search-box">
                             <input id="searchInput" type="text" placeholder="Search products and catalogues">
                             <svg onclick="search()" t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
                         </div>
-                    </li>
+                    </li> 
                     @Html.Partial("_LoginPartial")
                 </ul>
             </div>
