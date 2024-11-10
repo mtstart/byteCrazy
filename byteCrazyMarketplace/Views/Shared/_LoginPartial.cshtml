@@ -3,24 +3,22 @@
 {
     using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hellow" + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">注销</a></li>
-    </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hi " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">Logout</a></li>
+        </ul>
     }
 }
 else
 {
-    @*<ul class="nav navbar-nav navbar-right nav-button">*@
     <li class="nav-button-text">
         @Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })
     </li>
     <li class="nav-button-text">
         @Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })
     </li>
-    @*</ul>*@
 }
