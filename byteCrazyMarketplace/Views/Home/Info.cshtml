@@ -2,26 +2,29 @@
 @using Dapper;
 @using Newtonsoft.Json;
 @using System.Data.SqlClient
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "byteCrazy";
     using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;")) {
         connection.Open();
-        // 示例查询
         string productID = Request.QueryString["productID"];
         string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [productID] = @productID";
         sql = "select aspnetusers.username, category.title as 'category', product.* from product inner join aspnetusers on product.sellerID = aspnetusers.Id inner join category \r\n\ton product.categoryID = Category.categoryID\r\nwhere product.productID = @productID";
 
         IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID });
         ViewBag.dataTemp = JsonConvert.SerializeObject(results);
+        ViewBag.productID = Request.QueryString["productID"];
+
+        if (results.ToList().Count > 0)
+        {
+            ViewBag.showImg = results.ToList()[0].imgUrl;
+        }
     }
 }
 <style>
     .swiper-slide img {
         width: 100%;
         height: 100%;
-    }
-
-    .mySwiper {
     }
 
     .swiper {
@@ -46,6 +49,7 @@
         }
             .product-image-section img {
                 width: 100%;
+                height: 100%;
                 object-fit: fill;
                 pointer-events: none;
                 user-select: none;
@@ -116,27 +120,57 @@
         margin-bottom: 10px;
     }
 
-        .edit-box button {
-            background-color: #009fe9;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            margin-left: 5px;
-        }
-
-    .editing {
+    .edit-box button {
+        background-color: #009fe9;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        margin-left: 5px;
+    }
+    .editing .description {
         border: 1px solid #8a8aa1;
     }
+    .product-image-section {
+        position: relative;
+    }
+    .product-image-section .btn {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        border-radius: 0;
+        background-color: gainsboro;
+    }
+    .product-image-section form, .product-image-section form input[type="file"] {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        opacity: 0;
+        left: 0;
+        top: 0;
+    }
+    #saveButton {
+        display: none;
+    }
+    .editing #saveButton {
+        display: inline-block;
+    }
 </style>
-<link rel="stylesheet" href="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.css" />
-<!-- Swiper JS -->
-<script src="https://cunchu.site/temp/byteCrazy/swiper-bundle.min.js"></script>
 
-<div class="to-box" style="">
+<div class="to-box" >
     
     <div class="product-card">
         <div class="product-image-section">
-            <img src="https://cunchu.site/temp/byteCrazy/1.jpg">
+            <img src="@ViewBag.showImg">
+            <button class="btn" onclick="uploadImg()" data-toggle="tooltip" data-placement="top" title="Edit Product">
+                <i class="bi bi-pencil-fill"></i>
+                <form action="/Home/Upload" id="uploadForm" method="post" enctype="multipart/form-data">
+                    <input type="text" style="display: none;"  name="productID" value="@ViewBag.productID" >
+                    <input type="file" id="UploadedImage" onchange="document.getElementById('uploadForm').submit();" name="UploadedImage" accept="image/*" required>
+                </form>
+            </button>
         </div>
         <div class="product-info-section">
         </div>
@@ -147,21 +181,64 @@
 
 <!-- Initialize Swiper -->
 <script>
-    var swiper = new Swiper(".mySwiper", {
-        pagination: {
-            el: ".swiper-pagination",
-            loop: true,
-            autoplay:true
-        },
-    });
-
-    function edit () {
-        document.querySelector('.detailed').setAttribute('contenteditable', "")
-        document.querySelector('.detailed').classList.add('editing')
+    const loginUser = "@User.Identity.GetUserName()";
+    function edit (userName) {
+        if (userName !== loginUser) {
+            alert(`This post can only be edited by the publisher ${userName} and administrators. You do not have editing permissions.`);
+            return
+        }
+        if (document.querySelector('.to-box').classList.contains('editing')) {
+            document.querySelector('.detailed').removeAttribute('contenteditable', "")
+            document.querySelector('.to-box').classList.remove('editing')
+        } else {
+            document.querySelector('.detailed').setAttribute('contenteditable', "")
+            document.querySelector('.to-box').classList.add('editing')
+        }
+        
     }
 
-    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"'))
+    function save () {
+        const formdata = new FormData();
+        formdata.append("description", document.querySelector('.description').innerText);
+        formdata.append("productID", "@ViewBag.productID");
 
+        const requestOptions = {
+        method: "POST",
+        body: formdata,
+        redirect: "follow"
+        };
+
+        fetch("/Home/EditInfo", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+            location.reload()
+        })
+        .catch((error) => console.error(error));
+    }
+    function likeItem (productID) {
+        let likeS = localStorage.getItem('likeList')
+        if (!likeS) likeS = '{}'
+        likeS = JSON.parse(likeS)
+        likeS[productID] = !likeS[productID]
+        localStorage.setItem('likeList', JSON.stringify(likeS))
+        location.reload()
+    }
+
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'))
+    setTimeout(() => {
+        // Loading Bookmark Status
+        let likeS = localStorage.getItem('likeList')
+        if (!likeS) likeS = '{}'
+        likeS = JSON.parse(likeS)
+        if (likeS['@ViewBag.productID']) {
+            document.querySelector('.like-icon').classList.add('bi-bookmark-check-fill')
+        } else {
+            document.querySelector('.like-icon').classList.add('bi-bookmark')
+        }
+    }, 800);
+    function chatUser () {
+        window.open('https://aci-4570.talkvv.com?id=@ViewBag.productID')
+    }
     dataList = dataList[0]
     document.querySelector('.product-info-section').innerHTML
         = `<div class="seller-info">
@@ -172,11 +249,11 @@
                     ${dataList.username}
                 </div>
                 <div class="icon-function-list">
-                    <button class="btn" onclick="edit()" data-toggle="tooltip" data-placement="top" title="Edit Product">
+                    <button class="btn" onclick="edit('${dataList.username}')" data-toggle="tooltip" data-placement="top" title="Edit Product">
                         <i class="bi bi-pencil-fill"></i>
                     </button>
-                    <button class="btn" data-toggle="tooltip" data-placement="top" title="Save Product">
-                        <i class="bi bi-bookmark"></i>
+                    <button class="btn" data-toggle="tooltip" onclick="likeItem('@ViewBag.productID')" data-placement="top"  title="Save Product">
+                        <i class="bi like-icon"></i>
                     </button>
                 </div>
             </div>
@@ -194,18 +271,19 @@
                     ${dataList.location} | 3km from you
                 </div>
                 <div class="description detailed">
-                    ${dataList.description} Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.
-                    Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.Booklets are printed materials with four or more pages, containing details about a business, event, product, promotion, etc. They are also known as catalogs or pamphlets.
+                    ${dataList.description}
                 </div>
             </div>
             <div class="product-purchase">
-                <button type="button" id="purchaseButton" class="btn btn-outline-primary">Contact Buyer for Purchase</button>
+                <button type="button" id="purchaseButton" onclick="chatUser()" class="btn btn-outline-primary">Contact Buyer for Purchase</button>
+                <button type="button" id="saveButton" class="btn btn-outline-primary" onclick="save()">Save</button>
             </div>
             `
             //Purchase/Manufacture Year: ${dataList.postedDate}<br>
             //Release time: ${dataList.purchaseDate}<br>
             //Number of Followers: 16<br>
 </script>
+  
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
