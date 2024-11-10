@@ -26,43 +26,49 @@ namespace byteCrazy.Interface
         //Task<AdminListModels>  SearchProdunct(string productId);
         AdminListModels SearchProdunct(string productId);
 
-        // 获取待验证的帖子列表
+        //ApproveProduct
+        void ApproveProduct(string productId);
+
+        //RejectProduct
+        void RejectProduct(string productId, string rejectionReason);
+
+        // GetPendingListingsAsync
         Task<IEnumerable<AdminListModels>> GetPendingListingsAsync(int page = 1, int pageSize = 20);
 
-        // 获取已售出的物品列表
+        // GetPendingListingsAsync
         Task<IEnumerable<AdminListModels>> GetSoldItemsAsync(int page = 1, int pageSize = 20);
 
-        // 获取单个帖子的详细信息
+        // GetListingByIdAsync
         Task<AdminListModels> GetListingByIdAsync(int id);
 
-        // 验证帖子
+        // VerifyListingAsync
         Task<bool> VerifyListingAsync(int listingId, string adminId);
 
-        // 拒绝帖子
+        // RejectListingAsync
         Task<bool> RejectListingAsync(int listingId, string adminId, string rejectionReason);
 
-        // 标记帖子为已售出
+        // MarkListingAsSoldAsync
         Task<bool> MarkListingAsSoldAsync(int listingId, string sellerId);
 
-        // 获取帖子统计信息
+        // GetListingStatsAsync
         Task<ListingStats> GetListingStatsAsync();
 
-        // 搜索帖子
+        // SearchListingsAsync
         Task<IEnumerable<AdminListModels>> SearchListingsAsync(string searchTerm, ListingStatus? status = null, int page = 1, int pageSize = 20);
 
-        // 更新帖子信息
+        // UpdateListingAsync
         Task<bool> UpdateListingAsync(int listingId, AdminListModels updatedListing);
 
-        // 删除帖子
+        // DeleteListingAsync
         Task<bool> DeleteListingAsync(int listingId);
 
-        // 获取某个卖家的所有帖子
+        // GetListingsBySellerAsync
         Task<IEnumerable<AdminListModels>> GetListingsBySellerAsync(string sellerId, int page = 1, int pageSize = 20);
 
-        // 批量验证帖子
+        // BatchVerifyListingsAsync
         Task<int> BatchVerifyListingsAsync(IEnumerable<int> listingIds, string adminId);
 
-        // 获取最近的活动日志
+        // GetRecentActivityLogsAsync
         Task<IEnumerable<ListingActivityLog>> GetRecentActivityLogsAsync(int count = 50);
     }
 

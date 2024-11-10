@@ -76,14 +76,28 @@ namespace byteCrazy.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> VerifyListing(int id, bool isApproved, string rejectionReason = null)
+        [ValidateAntiForgeryToken]
+        public ActionResult VerifyListing(string productID, bool isApproved, string rejectionReason)
         {
-            return RedirectToAction("PendingListings");
-       
+            if (isApproved)
+            {
+                _listingManagementServiceInterface.ApproveProduct(productID);
+            }
+
+            else
+            {
+                _listingManagementServiceInterface.RejectProduct(productID, rejectionReason);
+            }
+
+            if (Request.UrlReferrer != null)
+            {
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+            else
+            {
+                return RedirectToAction("Index"); 
+            }
         }
-
-        
-
     }
 }
 

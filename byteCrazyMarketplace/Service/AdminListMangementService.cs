@@ -69,6 +69,10 @@ namespace byteCrazy.Interface
                                 UserID = reader["sellerID"].ToString(),
                                 Title = reader["title"].ToString(),
                                 ProductID = reader["productID"].ToString(),
+                                Location = reader["location"].ToString(),
+                                //Category = reader["category"].ToString(),
+                                Description = reader["description"].ToString(),
+                                Price = Convert.ToDecimal(reader["price"]),
                                 CreatedAt = Convert.ToDateTime(reader["postedDate"]),
                                 StatusString = reader["status"].ToString(),
                                 ImageUrls = new List<string> { reader["imgUrl"].ToString() }
@@ -134,6 +138,46 @@ namespace byteCrazy.Interface
             }
 
             return model;
+        }
+
+        //ApproveProduct
+        public void ApproveProduct(string productId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                //  active
+                string updateQuery = "UPDATE Product SET Status = @Status WHERE ProductID = @ProductID";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@Status", "active");
+                    updateCommand.Parameters.AddWithValue("@ProductID", productId);
+
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        //RejectProduct
+        public void RejectProduct(string productId, string rejectionReason)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+               
+                string updateQuery = "UPDATE Product SET Status = @Status, RejectionReason = @RejectionReason WHERE ProductID = @ProductID";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@Status", "rejected");
+                    updateCommand.Parameters.AddWithValue("@RejectionReason", rejectionReason);
+                    updateCommand.Parameters.AddWithValue("@ProductID", productId);
+
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+                }
+            }
         }
 
         public async Task<IEnumerable<AdminListModels>> GetPendingListingsAsync(int page = 1, int pageSize = 20)

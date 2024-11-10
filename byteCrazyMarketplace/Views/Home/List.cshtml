@@ -1,0 +1,276 @@
+﻿@using byteCrazy.Models
+@using Dapper;
+@using Newtonsoft.Json;
+@using System.Data.SqlClient
+@{
+    ViewBag.Title = "byteCrazy";
+    String searchKeyword = "";
+
+    // update serach result title by keyword
+    if (!string.IsNullOrEmpty(Request.QueryString["description"]))
+    {
+        searchKeyword = "All Products";
+    }
+    else
+    {
+        searchKeyword = "Search results for " + Request.QueryString["description"];
+    }
+
+    // udpate search requslt query
+    using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;"))
+    {
+        connection.Open();
+
+        string categoryStr = Request.QueryString["categoryID"];
+        string Location = Request.QueryString["Location"];
+        string priceMin = Request.QueryString["priceMin"];
+        string priceMax = Request.QueryString["priceMax"];
+        string description = Request.QueryString["description"];
+        string latest = Request.QueryString["Latest"];
+        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [status] = 'active'";
+        searchKeyword = description;
+
+        if (!string.IsNullOrEmpty(categoryStr))
+        {
+            sql = sql + " AND [categoryID] = @categoryID";
+        }
+        if (!string.IsNullOrEmpty(Location))
+        {
+            sql = sql + " AND [location] = @location";
+        }
+        if (!string.IsNullOrEmpty(priceMin))
+        {
+            sql = sql + " AND [price] > @priceMin";
+        }
+        if (!string.IsNullOrEmpty(priceMax))
+        {
+            sql = sql + " AND [price] < @priceMax";
+        }
+        if (!string.IsNullOrEmpty(description))
+        {
+            sql = sql + " AND [description] LIKE '%" + description + "%'";
+        }
+        if (!string.IsNullOrEmpty(latest))
+        {
+            sql = sql + " order by " + latest;
+        }
+        IEnumerable<dynamic> results = connection.Query(sql, new { categoryID = categoryStr, location = Location, priceMin = priceMin, priceMax = priceMax });
+        ViewBag.dataTemp = JsonConvert.SerializeObject(results);
+    }
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-title {
+        margin-bottom: 20px;
+        font-size: x-large;
+    }
+    .select-box {
+        margin-bottom: 10px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .select-box select, input {
+            background-color: #ebe9e9;
+            height: 31px;
+            border: none;
+            border-radius: 7px;
+            padding: 0 10px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+
+        .select-box input {
+            width: 80px;
+        }
+
+        .select-box button {
+            height: 31px;
+        }
+
+        .select-box button {
+            margin-left: 20px;
+        }
+
+        .select-box .price-section input {
+            margin-left: 4px;
+            margin-right: 4px;
+        }
+
+    .search-button {
+        background-color: #009fe9;
+        color: white;
+    }
+
+    .seach-results {
+        display: flex;
+        justify-content: center;
+    }
+
+    .card-list {
+        max-width: 980px;
+    }
+
+        .card-list .card {
+            width: 300px;
+            height: 400px;
+            float: left;
+            margin: 0px 24px 24px 0px;
+            cursor: pointer;
+            transition-duration: 0.5s;
+            background-color: #F0F1F3;
+        }
+
+            .card-list .card img {
+                width: 300px;
+                height: 245px;
+                display: block;
+            }
+
+            .card-list .card div {
+                padding: 8px 0px 0px 8px;
+            }
+
+                .card-list .card div p {
+                    width: 100%;
+                    max-height: 64px;
+                    margin-bottom: 0px;
+                    font-size: 18px;
+                    line-height: 32px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+    .clear {
+        clear: both;
+    }
+
+    #search-result-none {
+        display: none;
+        margin-bottom: 100px;
+    }
+        #search-result-none .title {
+            font-size: large;
+        }
+        #search-result-none .description {
+            font-size: larger;
+        }
+
+    .card-list .card img:hover {
+        transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
+    }
+</style>
+<div class="page-title">Search results for @searchKeyword</div>
+<div class="select-box">
+    <select name="Categories" id="Categories">
+        <option value="">Categories</option>
+        <option value="CAT001">Electronics</option>
+        <option value="CAT002">Clothing</option>
+        <option value="CAT003">Books</option>
+        <option value="CAT004">Home & Garden</option>
+        <option value="CAT005">Sports & Outdoors</option>
+    </select>
+    <select name="Latest" id="Latest">
+        <option value="">Order by</option>
+        <option value="title">Product Name</option>
+        <option value="categoryID">Categories</option>
+        <option value="location">Location</option>
+        <option value="price asc">Price Low to High</option>
+        <option value="price desc">Price High to Low</option>
+    </select>
+    <select name="Location" id="Locations">
+        <option value="">Location</option>
+        <option value="Newcastle">Newcastle</option>
+        <option value="Hamilton">Hamilton</option>
+        <option value="Cooks Hill">Cooks Hill</option>
+        <option value="Merewether">Merewether</option>
+        <option value="Islington">Islington</option>
+        <option value="Broadmeadow">Broadmeadow</option>
+        <option value="Adamstown">Adamstown</option>
+        <option value="Stockton">Stockton</option>
+        <option value="Waratah">Waratah</option>
+        <option value="Charlestown">Charlestown</option>
+        <option value="Others">Others</option>
+    </select>
+    <div class="price-section">
+        Price:<input type="number" id="priceMin">-<input type="number" id="priceMax">
+    </div>
+    <button class="btn btn-primary search-button" onclick="Search()" title="Search">Search</button>
+    <button class="btn btn-outline-primary" onclick="ClearFilter()" title="Clear">Clear Filter</button>
+
+</div>
+
+<div id="search-result-none">
+    <div class="title">
+        No results
+    </div>
+    <div class="description">
+        Sorry, we couldn't find anything that fit your search.
+    </div>
+</div>
+
+<div class="seach-results">
+    <div class="card-list">
+    </div>
+</div>
+<div class="clear"></div>
+<script>
+    function selectCard(id) {
+        location.href = '/Home/Info?productID=' + id
+    }
+
+    let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'));
+    let tempHtml = ``;
+
+    if (dataList.length == 0) {
+        document.getElementById("search-result-none").style = "display: block;";
+    }
+
+    dataList.forEach(element => {
+        tempHtml+= `<div class="card" onclick="selectCard('${element.productID}')">
+            <img src="${element.imgUrl}">
+            <div>
+                <p>${element.description}​</p>
+                <p>$${element.price}​</p>
+                <p>${element.location} | ${element.title}​</p>
+            </div>
+        </div>`
+        document.querySelector('.card-list').innerHTML = tempHtml
+    });
+
+    function ClearFilter() {
+        let resultsUrl = '/Home/List?'
+        location.href = resultsUrl;
+    }
+
+    function Search () {
+        let resultsUrl = '/Home/List?';
+
+        if (window.Categories.value) {
+            resultsUrl += "categoryID=" + window.Categories.value + '&'
+        }
+        if (window.Locations.value) {
+            resultsUrl += "Location=" + window.Locations.value + '&'
+        }
+        if (window.priceMin.value) {
+            resultsUrl += "priceMin=" + window.priceMin.value + '&'
+        }
+        if (window.priceMax.value) {
+            resultsUrl += "priceMax=" + window.priceMax.value + '&'
+        }
+        if (window.Latest.value) {
+            resultsUrl += "Latest=" + window.Latest.value + '&'
+        }
+
+        location.href = resultsUrl;
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
