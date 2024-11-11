@@ -1,5 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.SqlClient;
@@ -19,7 +23,6 @@ namespace byteCrazy.Controllers
         
         public ActionResult Index()
         {
-            ViewBag.CategoryId = "sdsd";
             return View();
         }
 
@@ -79,6 +82,42 @@ namespace byteCrazy.Controllers
                 }
             }
             return RedirectToAction("Info", new { productID = model.productID });
+        }
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder result = new StringBuilder(length);
+            Random random = new Random();
+
+            for (int i = 0; i < length; i++)
+            {
+                result.Append(chars[random.Next(chars.Length)]);
+            }
+
+            return result.ToString();
+        }
+        // Get: /Home/AddNew
+        [AllowAnonymous]
+        public ActionResult AddNew()
+        {
+            string productID = GenerateRandomString(8);
+            
+            string updateQuery = "INSERT INTO [dbo].[Product] ([productID], [title], [description], [categoryID], [location], [price], [imgUrl], [sellerID], [buyerID], [status], [postedDate], [purchaseDate]) OUTPUT INSERTED.[productID], INSERTED.[title], INSERTED.[description], INSERTED.[categoryID], INSERTED.[location], INSERTED.[price], INSERTED.[imgUrl], INSERTED.[sellerID], INSERTED.[buyerID], INSERTED.[status], INSERTED.[postedDate], INSERTED.[purchaseDate] VALUES (N'" + productID + "', N'title', N'description', N'CAT003', N'location', 1000, N'/UploadedImages/20241112020656.png', N'" + User.Identity.GetUserId() +"', NULL, N'active', '2024-11-11 01:00:00.000', NULL)";
+            // 更新数据
+            Console.WriteLine(updateQuery);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // 打开数据库连接
+                connection.Open();
+
+                // 创建 SqlCommand 对象
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    Console.WriteLine(updateQuery);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return RedirectToAction("Info", new { productID = productID });
         }
         //
         // GET: /Home/List
