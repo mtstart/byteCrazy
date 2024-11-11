@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
 
     <script>
         // Press enter to search
@@ -273,17 +276,14 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("Scripts", required: false)
-    <script>
-        function search() {
-            location.href = '/Home/List?description=' + window.searchInput.value
-        }
-    </script>
 </body>
 <!-- Customer Service Chat -->
 <script>
+    function search() {
+        location.href = '/Home/List?description=' + window.searchInput.value
+    }
+
+
     (function (d, t) {
         var BASE_URL = "https://app.voxsig.com";
         var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
