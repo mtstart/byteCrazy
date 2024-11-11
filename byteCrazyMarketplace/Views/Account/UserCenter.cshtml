@@ -1,0 +1,168 @@
+@model byteCrazy.Models.UserCenterViewModel
+@{
+    ViewData["Title"] = "User Center";
+}
+
+<style>
+
+    .page-title {
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-size: x-large;
+        color: #5555c9;
+    }
+
+    .user-activity {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .product-list {
+        width: 360px;
+        margin: 0px 0px 12px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+        .product-list .list-title {
+            padding-top: 12px;
+            font-size: larger;
+            font-weight: bold;
+            padding-left: 4px;
+            border-bottom: solid 4px #d5ecfa;
+            background-color: #d5ecfa;
+        }
+
+        .product-list .product-section {
+            margin-bottom: 32px;
+        }
+
+    .product-item-list-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+        .product-item-list-2.title {
+            padding-top: 4px;
+            padding-left: 4px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #808080;
+        }
+
+        .product-item-list-2.item {
+            padding-left: 4px;
+            margin-bottom: 8px;
+        }
+
+    .product-item-list-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+        .product-item-list-3.title {
+            padding-top: 4px;
+            padding-left: 4px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #808080;
+        }
+
+        .product-item-list-3.item {
+            padding-left: 4px;
+            margin-bottom: 8px;
+        }
+</style>
+
+<div class="page-title">
+    <i class="bi bi-person-circle"></i>
+    User Center
+</div>
+
+<div class="user-activity">
+    <div class="product-list saved-product-list">
+        <div class="list-title">Saved Products</div>
+
+        <div class="product-item-list-2 title">
+            <div>Title</div>
+            <div>Price</div>
+        </div>
+
+        @foreach (var product in Model.SavedProducts)
+        {
+            <div class="product-item-list-2 item">
+                <div>@product.Title</div>
+                <div>$@product.Price</div>
+            </div>
+        }
+
+    </div>
+
+    <div class="product-list purchased-product-list">
+        <div class="list-title">Purchased Products</div>
+
+        <div class="product-item-list-3 title">
+            <div>Title</div>
+            <div>Price</div>
+            <div>Purchase Date</div>
+        </div>
+
+        @foreach (var product in Model.PurchasedProducts)
+        {
+            <div class="product-item-list-3 item">
+                <div>@product.Title</div>
+                <div>$@product.Price</div>
+                <div>@product.PurchaseDate</div>
+            </div>
+        }
+
+    </div>
+
+    <div class="product-list uploaded-product-list">
+
+        <div class="product-section active-product-section">
+            <div class="list-title">Active Posted Products</div>
+
+            <div class="product-item-list-3 title">
+                <div>Title</div>
+                <div>Price</div>
+                <div>Location</div>
+            </div>
+
+            @foreach (var product in Model.PublishedProductsOnSale)
+            {
+                <div class="product-item-list-3 item">
+                    <div>@product.Title</div>
+                    <div>$@product.Price</div>
+                    <div>@product.Location</div>
+                </div>
+            }
+
+        </div>
+
+        <div class="product-section sold-product-section">
+            <div class="list-title">Sold Products</div>
+
+            <div class="product-item-list-3 title">
+                <div>Title</div>
+                <div>Price</div>
+                <div>Purchase Date</div>
+            </div>
+
+            @foreach (var product in Model.PublishedProductsSold)
+            {
+                <div class="product-item-list-3 item">
+                    <div>@product.Title</div>
+                    <div>$@product.Price</div>
+                    <div>@product.PurchaseDate</div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+

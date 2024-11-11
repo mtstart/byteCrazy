@@ -19,7 +19,7 @@ namespace byteCrazy.Models
         [Key]
         public string ProductID { get; set; }
 
-        [Key]
+        
         public string UserID { get; set; }
 
         [Required]
@@ -32,7 +32,7 @@ namespace byteCrazy.Models
 
         [Required]
         [Range(0.01, 1000000)]
-        [Column(TypeName = "decimal(18,2)")]
+      
         public decimal Price { get; set; }
 
 

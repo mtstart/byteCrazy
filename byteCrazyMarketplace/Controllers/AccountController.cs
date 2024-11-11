@@ -122,7 +122,9 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
+
     };
             return View();
         }
@@ -183,7 +185,8 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
     };
         }
 
