@@ -4,16 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
 namespace byteCrazy.Models
 {
 
     public class ApplicationUser : IdentityUser
     {
         public string Hometown { get; set; }
-      
-        //public string Id { get; set; }
-
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -24,7 +20,7 @@ namespace byteCrazy.Models
         }
     }
 
-    // 数据库上下文
+    // Database context
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<UserDetails> UserDetails { get; set; }

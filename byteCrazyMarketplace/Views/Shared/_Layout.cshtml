@@ -3,49 +3,80 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
+    <title>@ViewBag.Title - Trading Platform</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
+        body {
+            font-family: "Open Sans Bold, sans-serif, arial, verdana";
+            padding-top: 0;
+            padding-bottom: 0px;
+        }
+
         .navbar-inverse .navbar-brand {
             color: rgb(27 142 205);
             font-size: 30px;
             font-weight: bold;
+            /*            color: #0a0878;*/
+            color: #07065C;
         }
+
+        .navbar-inverse .navbar-brand:hover {
+            color: #07065C;
+        }
+
         .navbar-inverse {
             background-color: white;
             border: none;
             position: relative;
         }
 
+        .top-nav-section {
+            /*            display: flex;
+            flex-direction: row;*/
+        }
+
         .navbar .container {
-            border-bottom: 5px solid #d5ecfa;
+            /*            border-bottom: 5px solid #d5ecfa;*/
             height: 60px;
         }
-        .search-box {
-            position: absolute;
-            right: 125px;
+
+        .navbar .nav-container {
+            height: fit-content;
         }
-        .search-box input {
+
+        .nav-divider {
             background-color: #d5ecfa;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 10px;
-            line-height: 24px;
-            width: 700px;
-            margin: 8px;
+            width: 100%;
+            height: 5px;
         }
-        .nav.navbar-nav li a:hover {
-            color: #009fe9;
+
+        .search-box {
+            /*            position: absolute;
+            right: 125px;*/
         }
+
+            .search-box input {
+                background-color: #d5ecfa;
+                border: none;
+                padding: 5px 12px;
+                border-radius: 4px;
+                line-height: 24px;
+                width: 700px;
+                margin: 8px;
+                background-color: #f2f2f2;
+                border: solid 1px #d9d9d9;
+                color: black;
+            }
+
         .navbar-collapse {
             position: relative;
+            border-color: #d5ecfa !important;
         }
-        body {
-            padding-top: 0;
-        }
+
         .search-box svg {
             position: absolute;
             width: 22px;
@@ -53,62 +84,180 @@
             right: 16px;
             top: 13px;
             fill: #646e77;
+            cursor: pointer;
         }
-        
-        
-    </style>
 
+        .nav-button {
+            color: #d5ecfa;
+        }
+
+            .nav-button:hover {
+                color: #d5ecfa;
+            }
+
+
+        .nav-button-text {
+            border-bottom: solid 4px transparent;
+        }
+
+            .nav-button-text:hover {
+                border-bottom: solid 4px #d5ecfa;
+            }
+
+        .navbar-inverse .navbar-nav > li > a:hover {
+            color: #9d9d9d;
+        }
+
+        .navbar-toggle {
+            border: 0px;
+        }
+
+        .icon-bar {
+            background-color: #d9d9d9 !important;
+        }
+
+            .icon-bar:hover {
+            }
+
+            .icon-bar:focus {
+                background-color: white !important;
+            }
+
+        footer {
+            background-color: #d5ecfa;
+        }
+
+        .footer-section {
+            /*            width: 1100px;*/
+            /*            margin: 0 auto;*/
+
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0px;
+            color: #07065C;
+        }
+            .footer-container {
+                width: 90%;
+                align-self: center;
+            }
+
+        .site-intro {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+
+            .site-intro .note {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .site-intro .connect .social-icon-list {
+                display: flex;
+                flex-direction: row;
+            }
+
+        .bi {
+            margin-right: 8px;
+        }
+
+        .site-acknowledgement {
+            margin-bottom: 16px;
+        }
+
+        .site-name {
+            text-align: center;
+        }
+
+        /* icons */
+        .e-search:before {
+            content: '\F344';
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="nav-container container top-nav-section">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("应用程序名称", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Relocator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("主页", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
+                <ul class="nav navbar-nav navbar-right nav-button">
+                    <li>
+                        <div class="search-box">
+                            <input id="searchInput" type="text" placeholder="Search products and catalogues">
+                            <svg onclick="search()" t="1728403371168" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4266" width="200" height="200"><path d="M473.6 51.2a422.4 422.4 0 0 1 324.608 692.736l165.888 165.888c12.9536 12.5952 11.1616 35.1744-3.7888 50.5344-15.36 14.9504-37.9392 16.64-50.4832 3.7376l-165.888-165.888A422.4 422.4 0 1 1 473.6 51.2z m0 76.032c-219.2896 0-345.7536 176.64-345.7536 346.368 0 169.728 126.1056 347.136 345.6 347.136 219.4432 0 345.6-177.408 345.6-347.136 0-169.728-126.1568-346.368-345.4464-346.368z" p-id="4267"></path></svg>
+                        </div>
+                    </li>
+                    @Html.Partial("_LoginPartial")
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            <a href="@Url.Action("UserCenter", "Account")">个人中心</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("LogOff", "Account")">注销</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <a href="@Url.Action("Login", "Account")">登录</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Register", "Account")">注册</a>
-                        </li>
-                    }
-                </ul>
-                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="nav-container container body-content">
         @RenderBody()
         @RenderSection("SPAViews", required: false)
-        <hr />
+        @*<hr />*@
         <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
+            <div class="nav-container container">
+                <div class="footer-section">
+                    <div class="footer-container">
+                        <div class="site-intro">
+                            <div class="note">
+                                <div>
+                                    Relocator!
+                                </div>
+                                <div>
+                                    We're here to connect new and current students in UON to help them out in moving in and out
+                                </div>
+                            </div>
+
+                            <div class="connect">
+                                <div>
+                                    Connect us on Socials
+                                </div>
+                                <div class="social-icon-list">
+                                    <div>
+                                        <i class="bi bi-facebook"></i>
+                                    </div>
+                                    <div>
+                                        <i class="bi bi-instagram"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="site-acknowledgement">
+                            We acknowledge the Traditional Owners and Custodians of Country throughout Australia. We pay our respects to all First Nations peoples and acknowledge Elders past and present.
+                        </div>
+
+                        <div class="site-name">
+                            Relocator &copy; @DateTime.Now.Year | Student Based Application for UON students
+                        </div>
+
+                    </div>
+
+                    <p></p>
+                </div>
+
+            </div>
         </footer>
     </div>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("Scripts", required: false)
+    <script>
+        function search () {
+            location.href = '/Home/List?description=' + window.searchInput.value
+        }
+    </script>
 </body>
 </html>

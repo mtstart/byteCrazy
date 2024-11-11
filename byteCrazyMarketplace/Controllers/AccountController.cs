@@ -60,9 +60,10 @@ namespace byteCrazy.Controllers
             }
         }
 
-        // Authorize 操作是当你访问任何
-        // 受保护的 Web API 时调用的终结点。如果用户未登录，则将被重定向到
-        // Login 页。在成功登录后，你可以调用 Web API。
+        // The Authorize action is the endpoint that is called when you access any protected Web API. 
+        // If the user is not logged in, they will be redirected to the Login page. 
+        //After a successful login, you can call the Web API.
+
         [HttpGet]
         public ActionResult Authorize()
         {
@@ -93,67 +94,18 @@ namespace byteCrazy.Controllers
                 return View(model);
             }
 
-            // 这不会计入到为执行帐户锁定而统计的登录失败次数中
-            // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+
+            if (result == SignInStatus.Success)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "无效的登录尝试。");
-                    return View(model);
+                return RedirectToLocal(returnUrl);
             }
+
+            ModelState.AddModelError("", "Invalid login attempt。");
+            return View(model);
         }
 
-        //
-        // GET: /Account/VerifyCode
-        [AllowAnonymous]
-        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
-        {
-            // 要求用户已通过使用用户名/密码或外部登录名登录
-            if (!await SignInManager.HasBeenVerifiedAsync())
-            {
-                return View("Error");
-            }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-        //
-        // POST: /Account/VerifyCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // 以下代码可以防范双重身份验证代码遭到暴力破解攻击。
-            // 如果用户输入错误代码的次数达到指定的次数，则会将
-            // 该用户帐户锁定指定的时间。
-            // 可以在 IdentityConfig 中配置帐户锁定设置
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "代码无效。");
-                    return View(model);
-            }
-        }
-
+   
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -161,7 +113,7 @@ namespace byteCrazy.Controllers
         {
             ViewBag.HometownList = new List<SelectListItem>
     {
-        new SelectListItem { Text = "Newcastle", Value = "Newcastle1111111" },
+        new SelectListItem { Text = "Newcastle", Value = "Newcastle" },
         new SelectListItem { Text = "Hamilton", Value = "Hamilton" },
         new SelectListItem { Text = "Cooks Hill", Value = "Cooks Hill" },
         new SelectListItem { Text = "Merewether", Value = "Merewether" },
@@ -170,7 +122,9 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
+
     };
             return View();
         }
@@ -200,7 +154,7 @@ namespace byteCrazy.Controllers
                     Email = email,
                     Hometown = model.Hometown,
                     PhoneNumber = model.PhoneNumber,
-                    Id = model.StudentNumber  
+                    Id = model.StudentNumber  // use StudentNumber as fo Id
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
@@ -217,7 +171,7 @@ namespace byteCrazy.Controllers
             return View(model);
         }
 
-        // 辅助方法来获取 HometownList
+        // Helper methods to get HometownList
         private List<SelectListItem> GetHometownList()
         {
             return new List<SelectListItem>
@@ -231,7 +185,8 @@ namespace byteCrazy.Controllers
         new SelectListItem { Text = "Adamstown", Value = "Adamstown" },
         new SelectListItem { Text = "Stockton", Value = "Stockton" },
         new SelectListItem { Text = "Waratah", Value = "Waratah" },
-        new SelectListItem { Text = "Charlestown", Value = "Charlestown" }
+        new SelectListItem { Text = "Charlestown", Value = "Charlestown" },
+        new SelectListItem { Text = "Others", Value = "Others" }
     };
         }
 
@@ -305,40 +260,14 @@ namespace byteCrazy.Controllers
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 
-                // 这里通常会发送一封包含重置链接的邮件，但为了简化，我们直接重定向
+                
                 return RedirectToAction("ResetPassword", new { email = user.Email, code = code });
             }
 
-            // 如果我们到达这里，说明出现了问题，重新显示表单
+            // Explanation: There is a problem, please redisplay the form
             return View(model);
         }
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await UserManager.FindByNameAsync(model.Email);
-        //        if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-        //        {
-        //            // 请不要显示该用户不存在或者未经确认
-        //            return View("ForgotPasswordConfirmation");
-        //        }
-
-        //        // 有关如何启用帐户确认和密码重置的详细信息，请访问 https://go.microsoft.com/fwlink/?LinkID=320771
-        //        // 发送包含此链接的电子邮件
-        //        // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-        //        // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-        //        // await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击<a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
-        //        // return RedirectToAction("ForgotPasswordConfirmation", "Account");
-        //    }
-
-        //    // 如果我们进行到这一步时某个地方出错，则重新显示表单
-        //    return View(model);
-        //}
-
-        //
+     
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
@@ -387,156 +316,8 @@ namespace byteCrazy.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // 请求重定向到外部登录提供程序
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
-
-        //
-        // GET: /Account/SendCode
-        [AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
-        {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
-            {
-                return View("Error");
-            }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-        //
-        // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SendCode(SendCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            // 生成令牌并发送该令牌
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            {
-                return View("Error");
-            }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-        }
-
-        //
-        // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
-        {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            // 如果用户已具有登录名，则使用此外部登录提供程序将该用户登录
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
-                default:
-                    // 如果用户没有帐户，则提示该用户创建帐户
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-            }
-        }
-
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // 从外部登录提供程序中获取有关用户的信息
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-
-                // 新增：检查邮箱是否已被使用
-                var existingUser = await UserManager.FindByEmailAsync(model.Email);
-                if (existingUser != null)
-                {
-                    ModelState.AddModelError("", "Email already exists. Please use a different email address.");
-                    return View(model);
-                }
-
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Hometown = model.Hometown,
-                    // 新增：添加 StudentNumber 属性
-                    Id = model.StudentNumber
-                };
-
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        // 新增：保存额外的用户信息
-                        await SaveAdditionalUserInfoAsync(user, model);
-
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
-        }
-
-        // 新增：保存额外用户信息的方法
-        private async Task SaveAdditionalUserInfoAsync(ApplicationUser user, ExternalLoginConfirmationViewModel model)
-        {
-            // 这里可以保存不适合放在 ApplicationUser 中的额外信息
-            // 例如，保存到一个单独的 UserDetails 表中
-            var userDetails = new UserDetails
-            {
-                UserId = user.Id,
-
-            };
-
-            _context.UserDetails.Add(userDetails);
-            await _context.SaveChangesAsync();
-        }
-
-        //
+     
+ 
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -546,41 +327,13 @@ namespace byteCrazy.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
-
-  
 
 
 
-        #region 帮助程序
-        // 用于在添加外部登录名时提供 XSRF 保护
+
+
+        #region Helper
+        // Used to provide XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager

@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace byteCrazy.Models
 {
-    // AccountController 操作返回的模型。
+    // Model returned by AccountController actions.
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "电子邮件")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "家乡")]
+        [Display(Name = "Hometown")]
         public string Hometown { get; set; }
         [Required]
         [Display(Name = "Student Number")]
@@ -24,7 +24,7 @@ namespace byteCrazy.Models
         public string UserId { get; set; }
         public string AdditionalInfo1 { get; set; }
         public string AdditionalInfo2 { get; set; }
-        // 添加其他需要的字段...
+        
 
         public virtual ApplicationUser User { get; set; }
     }
@@ -47,11 +47,11 @@ namespace byteCrazy.Models
         public string Provider { get; set; }
 
         [Required]
-        [Display(Name = "代码")]
+        [Display(Name = "code")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "记住此浏览器?")]
+        [Display(Name = "Remember this browser?")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -60,23 +60,23 @@ namespace byteCrazy.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "电子邮件")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "电子邮件")]
+        [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "密码")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "记住我?")]
+        [Display(Name = "Rember me?")]
         public bool RememberMe { get; set; }
     }
 
@@ -107,7 +107,7 @@ namespace byteCrazy.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
        
-        [Display(Name = "用户ID")]
+        [Display(Name = "User ID")]
         public string UserId { get; set; }
 
         [Required]
@@ -150,10 +150,10 @@ namespace byteCrazy.Models
     }
     public class UserCenterViewModel
     {
-        public List<Product> PublishedProductsOnSale { get; set; }  // 在售产品
-        public List<Product> PublishedProductsSold { get; set; }    // 已售产品
-        public List<Product> PurchasedProducts { get; set; }        // 已购买的产品
-        public List<Product> SavedProducts { get; set; }            // 已保存的产品
+        public List<Product> PublishedProductsOnSale { get; set; }  // Products on sale
+        public List<Product> PublishedProductsSold { get; set; }    // Sold
+        public List<Product> PurchasedProducts { get; set; }        // Purchased products
+        public List<Product> SavedProducts { get; set; }            // saved
     }
     public class Product
     {
