@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace byteCrazy.Models
 {
-    //  Model returned by AccountController actions
+    // Model returned by AccountController actions.
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -30,7 +30,7 @@ namespace byteCrazy.Models
     }
     public class ExternalLoginListViewModel
     {
-        public string ReturnUrl { get; set; }    
+        public string ReturnUrl { get; set; }
     }
 
     public class SendCodeViewModel

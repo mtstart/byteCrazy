@@ -15,13 +15,11 @@
 }
 else
 {
-    @*<ul class="nav navbar-nav navbar-right nav-button">*@
     <li class="nav-button-text">
         @Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })
     </li>
     <li class="nav-button-text">
         @Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })
     </li>
-    @*</ul>*@
 }
-}
+

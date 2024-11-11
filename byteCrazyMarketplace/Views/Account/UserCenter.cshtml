@@ -1,178 +1,168 @@
 @model byteCrazy.Models.UserCenterViewModel
 @{
     ViewData["Title"] = "User Center";
-    Layout = null;
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
+<style>
 
-        .header {
-            background-color: #e6f3ff;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
+    .page-title {
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-size: x-large;
+        color: #5555c9;
+    }
+
+    .user-activity {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .product-list {
+        width: 360px;
+        margin: 0px 0px 12px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+        .product-list .list-title {
+            padding-top: 12px;
+            font-size: larger;
             font-weight: bold;
-            position: relative;
+            padding-left: 4px;
+            border-bottom: solid 4px #d5ecfa;
+            background-color: #d5ecfa;
         }
 
-        .nav {
-            position: absolute;
-            right: 20px;
-            bottom: 10px; /* ������ֵ�Խ���ť�����ƶ� */
+        .product-list .product-section {
+            margin-bottom: 32px;
         }
 
-            .nav a {
-                margin-left: 20px;
-                text-decoration: none;
-                color: #333;
-            }
+    .product-item-list-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-        .container {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
+        .product-item-list-2.title {
+            padding-top: 4px;
+            padding-left: 4px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #808080;
         }
 
-        .box {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            width: 30%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .product-item-list-2.item {
+            padding-left: 4px;
+            margin-bottom: 8px;
         }
 
-            .box h2 {
-                margin-top: 0;
-                color: #666;
-                text-transform: capitalize; /* ȷ������ĸ��д */
-            }
+    .product-item-list-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .product-item-list-3.title {
+            padding-top: 4px;
+            padding-left: 4px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #808080;
         }
 
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
+        .product-item-list-3.item {
+            padding-left: 4px;
+            margin-bottom: 8px;
         }
+</style>
 
-        th {
-            background-color: #f2f2f2;
-            text-transform: capitalize; /* ȷ������ĸ��д */
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        User Center
-        <div class="nav">
-            <a href="@Url.Action("Index", "Home")">Home</a>
-            <a href="@Url.Action("Login", "Account")">Logout</a>
+<div class="page-title">
+    <i class="bi bi-person-circle"></i>
+    User Center
+</div>
+
+<div class="user-activity">
+    <div class="product-list saved-product-list">
+        <div class="list-title">Saved Products</div>
+
+        <div class="product-item-list-2 title">
+            <div>Title</div>
+            <div>Price</div>
         </div>
+
+        @foreach (var product in Model.SavedProducts)
+        {
+            <div class="product-item-list-2 item">
+                <div>@product.Title</div>
+                <div>$@product.Price</div>
+            </div>
+        }
+
     </div>
 
-    <div class="container">
-        <div class="box">
-            <h2>Saved Products</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.SavedProducts)
-                    {
-                        <tr>
-                            <td>@product.Title</td>
-                            <td>@product.Price</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <div class="product-list purchased-product-list">
+        <div class="list-title">Purchased Products</div>
+
+        <div class="product-item-list-3 title">
+            <div>Title</div>
+            <div>Price</div>
+            <div>Purchase Date</div>
         </div>
 
-        <div class="box">
-            <h2>Purchased Products</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Purchase Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.PurchasedProducts)
-                    {
-                        <tr>
-                            <td>@product.Title</td>
-                            <td>@product.Price</td>
-                            <td>@product.PurchaseDate</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        @foreach (var product in Model.PurchasedProducts)
+        {
+            <div class="product-item-list-3 item">
+                <div>@product.Title</div>
+                <div>$@product.Price</div>
+                <div>@product.PurchaseDate</div>
+            </div>
+        }
 
-        <div class="box">
-            <h2>Uploaded Products</h2>
-            <h3>On Sale</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.PublishedProductsOnSale)
-                    {
-                        <tr>
-                            <td>@product.Title</td>
-                            <td>@product.Price</td>
-                            <td>@product.Location</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <h3>Sold</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Purchase Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.PublishedProductsSold)
-                    {
-                        <tr>
-                            <td>@product.Title</td>
-                            <td>@product.Price</td>
-                            <td>@product.PurchaseDate</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
     </div>
-</body>
-</html>
+
+    <div class="product-list uploaded-product-list">
+
+        <div class="product-section active-product-section">
+            <div class="list-title">Active Posted Products</div>
+
+            <div class="product-item-list-3 title">
+                <div>Title</div>
+                <div>Price</div>
+                <div>Location</div>
+            </div>
+
+            @foreach (var product in Model.PublishedProductsOnSale)
+            {
+                <div class="product-item-list-3 item">
+                    <div>@product.Title</div>
+                    <div>$@product.Price</div>
+                    <div>@product.Location</div>
+                </div>
+            }
+
+        </div>
+
+        <div class="product-section sold-product-section">
+            <div class="list-title">Sold Products</div>
+
+            <div class="product-item-list-3 title">
+                <div>Title</div>
+                <div>Price</div>
+                <div>Purchase Date</div>
+            </div>
+
+            @foreach (var product in Model.PublishedProductsSold)
+            {
+                <div class="product-item-list-3 item">
+                    <div>@product.Title</div>
+                    <div>$@product.Price</div>
+                    <div>@product.PurchaseDate</div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+

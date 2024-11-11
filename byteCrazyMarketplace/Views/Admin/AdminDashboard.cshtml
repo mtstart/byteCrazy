@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    .dashboard-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 260px;
+        height: 150px;
+        background-color: lightgray;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+
+    dashboard-card .card-title {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .dashboard-card .card-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+
+<h1>Admin Dashboard</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card h-100" onclick="location.href='@Url.Action("TotalListings", "Admin")'">
+                <div class="card-body">
+                    <h5 class="card-title">Total Listings</h5>
+                    <p class="card-text text-primary">@Model.TotalListings</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card h-100" onclick="location.href='@Url.Action("PendingListings", "Admin")'">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Verification</h5>
+                    <p class="card-text text-warning">@Model.PendingVerification</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card h-100" onclick="location.href='@Url.Action("ActiveListings", "Admin")'">
+                <div class="card-body">
+                    <h5 class="card-title">Active Listings</h5>
+                    <p class="card-text text-success">@Model.ActiveListings</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card h-100" onclick="location.href='@Url.Action("SoldItems", "Admin")'">
+                <div class="card-body">
+                    <h5 class="card-title">Sold Items</h5>
+                    <p class="card-text text-info">@Model.SoldListings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
