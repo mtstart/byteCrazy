@@ -254,12 +254,6 @@
         window.open('https://aci-4570.talkvv.com?id=@ViewBag.productID')
     }
 
-    //for toggling seller info
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-
     // copy seller phone number
     function copySellerNumber(phoneNumber) {
         // Get the text
@@ -270,6 +264,10 @@
 
         // Alert the copied text
         alert("Copied phone number: " + phoneNumber);
+    }
+
+    function linkToLogin() {
+        location.href = "/Account/Login";
     }
 
     dataList = dataList[0]
@@ -308,17 +306,31 @@
                 </div>
             </div>
             <div class="product-purchase">
-                <button type="button" id="purchaseButton" class="btn btn-outline-primary" data-toggle="collapse" data-target="#seller-info-collapse" data-bs-target="seller-info-collapse">
+                <button type="button" id="purchaseButton" class="btn btn-outline-primary"
+                    data-toggle="collapse" data-target="#seller-info-collapse" data-bs-target="seller-info-collapse"
+                >
                     Contact Seller for Purchase
                 </button>
-                <div class="collapse" id="seller-info-collapse">
-                    Seller's Phone Numer: ${dataList.PhoneNumber}
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="collapse" id="seller-info-collapse">
+                        Seller's Phone Numer: ${dataList.PhoneNumber}
 
-                    <button class="btn" onclick="copySellerNumber('${dataList.PhoneNumber}')" data-toggle="tooltip" data-placement="top" title="Copy Seller Phone Number">
-                        <i class="bi bi-copy"></i>
-                    </button>
-                </div>
-
+                        <button class="btn" onclick="copySellerNumber('${dataList.PhoneNumber}')" data-toggle="tooltip" data-placement="top" title="Copy Seller Phone Number">
+                            <i class="bi bi-copy"></i>
+                        </button>
+                    </div>
+                } else
+                {
+                    <div class="collapse" id="seller-info-collapse">
+                        Login to get seller's information
+                        <button class="btn" onclick="linkToLogin()" 
+                            data-toggle="tooltip" data-placement="top" title="Copy Seller Phone Number"
+                        >
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </button>
+                    </div>
+                }
                 <button type="button" id="saveButton" class="btn btn-outline-primary" onclick="save()">Save</button>
             </div>
             `
