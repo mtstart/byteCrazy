@@ -53,6 +53,7 @@
         .product-item-list-2.item {
             padding-left: 4px;
             margin-bottom: 8px;
+            cursor: pointer;
         }
 
     .product-item-list-3 {
@@ -71,6 +72,7 @@
         .product-item-list-3.item {
             padding-left: 4px;
             margin-bottom: 8px;
+            cursor: pointer;
         }
 
     .admin-button {
@@ -122,6 +124,12 @@
         }
 </style>
 
+<script>
+    function goToProductInfo(productId) {
+        window.open("/Home/Info?productID=" + productId);
+    }
+</script>
+
 <div class="page-title">
     <i class="bi bi-person-circle"></i>
     User Center
@@ -155,7 +163,7 @@
 
         @foreach (var product in Model.SavedProducts)
         {
-            <div class="product-item-list-2 item">
+            <div class="product-item-list-2 item" onclick="goToProductInfo('@product.ProductID')">
                 <div>@product.Title</div>
                 <div>$@product.Price</div>
             </div>
@@ -173,7 +181,7 @@
 
         @foreach (var product in Model.PurchasedProducts)
         {
-            <div class="product-item-list-3 item">
+            <div class="product-item-list-3 item" onclick="goToProductInfo('@product.ProductID')">
                 <div>@product.Title</div>
                 <div>$@product.Price</div>
                 <div>@product.PurchaseDate</div>
@@ -193,7 +201,7 @@
 
             @foreach (var product in Model.PublishedProductsOnSale)
             {
-                <div class="product-item-list-3 item">
+                <div class="product-item-list-3 item" onclick="goToProductInfo('@product.ProductID')">
                     <div>@product.Title</div>
                     <div>$@product.Price</div>
                     <div>@product.Location</div>
@@ -212,7 +220,7 @@
 
             @foreach (var product in Model.PublishedProductsSold)
             {
-                <div class="product-item-list-3 item">
+                <div class="product-item-list-3 item" onclick="goToProductInfo('@product.ProductID')">
                     <div>@product.Title</div>
                     <div>$@product.Price</div>
                     <div>@product.PurchaseDate</div>
