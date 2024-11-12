@@ -203,7 +203,7 @@
     </div>
     <button class="btn btn-primary search-button" onclick="Search()" title="Search">Search</button>
     <button class="btn btn-outline-primary" onclick="ClearFilter()" title="Clear">Clear Filter</button>
-    <button class="btn btn-primary search-button" onclick="addNew()" title="Release Items">Release Items</button>
+    <button class="btn btn-primary search-button" onclick="addNew()" title="Release Items">Post New Product</button>
 </div>
 
 <div id="search-result-none">
@@ -271,8 +271,20 @@
         location.href = resultsUrl;
     }
 
-    function addNew () {
-        window.open('/Home/AddNew')
+    function addNew() {
+        // check if user have logged in or not
+        let isLoggedIn = '@Request.IsAuthenticated';
+
+        // log in is required for creating new product
+        if (isLoggedIn == "True") {
+            window.open('/Home/AddNew');
+        } else {
+            alert("Please login first");
+            location.href = "/Account/Login";
+        }
+
+
+
     }
 </script>
 
