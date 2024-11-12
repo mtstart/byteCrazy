@@ -19,11 +19,11 @@ namespace byteCrazy
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-            routes.MapRoute(
-               name: "Admin",
-               url: "{controller}/{action}/{id}",
-               defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional }
-           );
+           // routes.MapRoute(
+           //    name: "Admin",
+           //    url: "{controller}/{action}/{id}",
+           //    defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional }
+           //);
 
         }
     }
