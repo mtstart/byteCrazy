@@ -172,7 +172,7 @@
     .editing #saveButton {
         display: inline-block;
     }
-    .editing #priceValue, .editing #locationValue {
+    .editing #priceValue, .editing #locationValue, .editing #titleValue {
         border: 1px solid #ccc;
     }
 </style>
@@ -204,11 +204,13 @@
             document.querySelector('.detailed').removeAttribute('contenteditable', "")
             document.querySelector('#priceValue').removeAttribute('contenteditable', "")
             document.querySelector('#locationValue').removeAttribute('contenteditable', "")
+            document.querySelector('#titleValue').removeAttribute('contenteditable', "")
             document.querySelector('.to-box').classList.remove('editing')
         } else {
             document.querySelector('.detailed').setAttribute('contenteditable', "")
             document.querySelector('#priceValue').setAttribute('contenteditable', "")
             document.querySelector('#locationValue').setAttribute('contenteditable', "")
+            document.querySelector('#titleValue').setAttribute('contenteditable', "")
             document.querySelector('.to-box').classList.add('editing')
         }
 
@@ -304,6 +306,7 @@
             document.querySelector('#priceValue').setAttribute('contenteditable', "")
             document.querySelector('#locationValue').setAttribute('contenteditable', "")
             document.querySelector('.to-box').classList.add('editing')
+            document.querySelector('#titleValue').setAttribute('contenteditable', "")
         }
         if ('${dataList.username}' !== '@User.Identity.GetUserName()') {
             window.editButton.style.display = 'none'
