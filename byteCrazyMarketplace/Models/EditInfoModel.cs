@@ -8,5 +8,6 @@ namespace byteCrazy.Models
         public string productID { get; set; }
         public string priceValue { get; set; }
         public string locationValue { get; set; }
+        public string title { get; set; }
     }
 }

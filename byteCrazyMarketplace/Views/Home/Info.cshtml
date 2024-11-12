@@ -219,6 +219,7 @@
         formdata.append("description", document.querySelector('.description').innerText);
         formdata.append("priceValue", document.querySelector('#priceValue').innerText);
         formdata.append("locationValue", document.querySelector('#locationValue').innerText);
+        formdata.append("title", document.querySelector('#titleValue').innerText);
         formdata.append("productID", "@ViewBag.productID");
 
         const requestOptions = {
@@ -328,7 +329,7 @@
             </div>
             <div class="product-title">
                 <div class="name">
-                    ${dataList.title}
+                    <span id="titleValue">${dataList.title}</span>
                 </div>
                 <div class="category">
                     ${dataList.category}

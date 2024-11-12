@@ -67,7 +67,7 @@ namespace byteCrazy.Controllers
         [HttpPost]
         public ActionResult EditInfo(EditInfoModel model)
         {
-            string updateQuery = "UPDATE [dbo].[Product] SET [description] = '" + model.description + "' AND [locationValue] = '" + model.locationValue + "' AND [priceValue] = '" + model.priceValue + "' WHERE [productID] = '" + model.productID + "'";
+            string updateQuery = "UPDATE [dbo].[Product] SET [description] = '" + model.description + "' AND [locationValue] = '" + model.locationValue + "' AND [priceValue] = '" + model.priceValue + "' AND [title] = '" + model.title + "' WHERE [productID] = '" + model.productID + "'";
             // 更新数据
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
