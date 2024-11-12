@@ -47,13 +47,13 @@ namespace byteCrazy.Controllers
                 model.UploadedImage.SaveAs(filePath);
 
                 string updateQuery = "UPDATE [dbo].[Product] SET [imgUrl] = '/UploadedImages/" + fileName + "' WHERE [productID] = '" + model.productID + "'";
-                // 更新数据
+                // Update data
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    // 打开数据库连接
+                    // Create connection destination
                     connection.Open();
 
-                    // 创建 SqlCommand 对象
+                    // Create connection destination
                     using (SqlCommand command = new SqlCommand(updateQuery, connection))
                     {
                         Console.WriteLine(updateQuery);
@@ -68,13 +68,13 @@ namespace byteCrazy.Controllers
         public ActionResult EditInfo(EditInfoModel model)
         {
             string updateQuery = "UPDATE [dbo].[Product] SET [description] = '" + model.description + "' , [location] = '" + model.locationValue + "' , [price] = '" + model.priceValue + "' , [title] = '" + model.title + "' WHERE [productID] = '" + model.productID + "'";
-            // 更新数据
+            // Update data
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // 打开数据库连接
+                // Open connection
                 connection.Open();
 
-                // 创建 SqlCommand 对象
+                // Create connection destination
                 using (SqlCommand command = new SqlCommand(updateQuery, connection))
                 {
                     Console.WriteLine(updateQuery);
@@ -89,13 +89,13 @@ namespace byteCrazy.Controllers
         public ActionResult Report(EditInfoModel model)
         {
             string updateQuery = "UPDATE [dbo].[Product] SET [status] = 'pending' WHERE [productID] = '" + model.productID + "'";
-            // 更新数据
+            // Update data
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // 打开数据库连接
+                // Open connection
                 connection.Open();
 
-                // 创建 SqlCommand 对象
+                // Create connection destination
                 using (SqlCommand command = new SqlCommand(updateQuery, connection))
                 {
                     Console.WriteLine(updateQuery);
@@ -124,14 +124,14 @@ namespace byteCrazy.Controllers
             string productID = GenerateRandomString(8);
             
             string updateQuery = "INSERT INTO [dbo].[Product] ([productID], [title], [description], [categoryID], [location], [price], [imgUrl], [sellerID], [buyerID], [status], [postedDate], [purchaseDate]) OUTPUT INSERTED.[productID], INSERTED.[title], INSERTED.[description], INSERTED.[categoryID], INSERTED.[location], INSERTED.[price], INSERTED.[imgUrl], INSERTED.[sellerID], INSERTED.[buyerID], INSERTED.[status], INSERTED.[postedDate], INSERTED.[purchaseDate] VALUES (N'" + productID + "', N'title', N'description', N'CAT003', N'location', 1000, N'/UploadedImages/20241112020656.png', N'" + User.Identity.GetUserId() +"', NULL, N'pending', '2024-11-11 01:00:00.000', NULL)";
-            // 更新数据
+            // Update data
             Console.WriteLine(updateQuery);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // 打开数据库连接
+                // Create connection
                 connection.Open();
 
-                // 创建 SqlCommand 对象
+                // Create connection destination
                 using (SqlCommand command = new SqlCommand(updateQuery, connection))
                 {
                     Console.WriteLine(updateQuery);

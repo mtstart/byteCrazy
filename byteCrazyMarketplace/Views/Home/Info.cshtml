@@ -99,6 +99,10 @@
             max-height: 200px;
             overflow-y: auto;
         }
+        .product-info-section > .product-title > .price {
+            display: flex;
+            flex-direction: row;
+        }
 
         .product-info-section > .product-purchase {
             padding-top: 20px;
@@ -172,7 +176,7 @@
     .editing #saveButton {
         display: inline-block;
     }
-    .editing #priceValue, .editing #locationValue, .editing #titleValue {
+    .editing #priceValue, .editing, .editing #titleValue {
         border: 1px solid #ccc;
     }
 </style>
@@ -199,19 +203,27 @@
 <!-- Initialize Swiper -->
 <script>
     function edit (userName) {
-        
+
         if (document.querySelector('.to-box').classList.contains('editing')) {
-            document.querySelector('.detailed').removeAttribute('contenteditable', "")
-            document.querySelector('#priceValue').removeAttribute('contenteditable', "")
-            document.querySelector('#locationValue').removeAttribute('contenteditable', "")
-            document.querySelector('#titleValue').removeAttribute('contenteditable', "")
-            document.querySelector('.to-box').classList.remove('editing')
+            toggleEditContent(false);
         } else {
+            toggleEditContent(true);
+        }
+    }
+
+    function toggleEditContent(edit) {
+        if (edit) {
             document.querySelector('.detailed').setAttribute('contenteditable', "")
             document.querySelector('#priceValue').setAttribute('contenteditable', "")
-            document.querySelector('#locationValue').setAttribute('contenteditable', "")
             document.querySelector('#titleValue').setAttribute('contenteditable', "")
             document.querySelector('.to-box').classList.add('editing')
+
+        } else {
+            document.querySelector('.detailed').removeAttribute('contenteditable', "")
+            document.querySelector('#priceValue').removeAttribute('contenteditable', "")
+            document.querySelector('#titleValue').removeAttribute('contenteditable', "")
+            document.querySelector('.to-box').classList.remove('editing')
+
         }
 
     }
@@ -232,12 +244,14 @@
 
         fetch("/Home/EditInfo", requestOptions)
         .then((response) => response.text())
-        .then((result) => {
-            location.reload()
+            .then((result) => {
+                toggleEditContent(false);
+                location.reload();
         })
         .catch((error) => console.error(error));
     }
-    function likeItem (productID) {
+
+    function likeItem(productID) {
         let likeS = localStorage.getItem('likeList')
         if (!likeS) likeS = '{}'
         likeS = JSON.parse(likeS)
@@ -258,9 +272,6 @@
             document.querySelector('.like-icon').classList.add('bi-bookmark')
         }
     }, 800);
-    function chatUser () {
-        window.open('https://aci-4570.talkvv.com?id=@ViewBag.productID')
-    }
 
     // copy seller phone number
     function copySellerNumber(phoneNumber) {
@@ -301,18 +312,14 @@
 
     dataList = dataList[0]
     setTimeout(() => {
-        if (dataList.description == 'description') {
-            document.querySelector('.detailed').setAttribute('contenteditable', "")
-            document.querySelector('#priceValue').setAttribute('contenteditable', "")
-            document.querySelector('#locationValue').setAttribute('contenteditable', "")
-            document.querySelector('.to-box').classList.add('editing')
-            document.querySelector('#titleValue').setAttribute('contenteditable', "")
-        }
-        if ('${dataList.username}' !== '@User.Identity.GetUserName()') {
-            window.editButton.style.display = 'none'
-            window.UploadedImage.style.display = 'none'
+        if (dataList.username !== '@User.Identity.GetUserName()') {
+            toggleEditContent(false);
+            window.editButton.style.visibility = 'hidden';
+        } else {
+            window.editButton.style.visibility = 'visible';
         }
     }, 100);
+
     document.querySelector('.product-info-section').innerHTML
         += `<div class="seller-info">
                 <div class="user-icon">
@@ -332,16 +339,17 @@
             </div>
             <div class="product-title">
                 <div class="name">
-                    <span id="titleValue">${dataList.title}</span>
+                    <div id="titleValue">${dataList.title}</div>
                 </div>
                 <div class="category">
                     ${dataList.category}
                 </div>
                 <div class="price">
-                    $<span id="priceValue">${dataList.price}</span>
+                    <div>$</div>
+                    <div id="priceValue">${dataList.price}</div>
                 </div>
                 <div class="location">
-                    <span id="locationValue">${dataList.location}</span> | 3km from you
+                    <div id="locationValue">${dataList.location}</div>
                 </div>
                 <div class="description detailed">
                     ${dataList.description}
@@ -366,7 +374,7 @@
                 {
                     <div class="collapse" id="seller-info-collapse">
                         Login to get seller's information
-                        <button class="btn" onclick="linkToLogin()" 
+                        <button class="btn" onclick="linkToLogin()"
                             data-toggle="tooltip" data-placement="top" title="Copy Seller Phone Number"
                         >
                             <i class="bi bi-box-arrow-up-right"></i>

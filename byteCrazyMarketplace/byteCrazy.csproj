@@ -300,6 +300,7 @@
     <Content Include="UploadedImages\catalog.jpg" />
     <Content Include="UploadedImages\clothings.jpg" />
     <Content Include="UploadedImages\electronics.jpg" />
+    <Content Include="UploadedImages\keyboard.jpg" />
     <Content Include="UploadedImages\renting.jpg" />
     <Content Include="UploadedImages\sell.jpg" />
     <Content Include="Views\Home\Info.cshtml" />
