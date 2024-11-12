@@ -148,6 +148,13 @@ namespace byteCrazy.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
     }
+    public class AdminUserList
+    {
+        [Key]
+        public string userID { get; set; }
+        public string status { get; set; }
+        public DateTime CreatedDate { get; set; }
+    }
     public class UserCenterViewModel
     {
         public List<Product> PublishedProductsOnSale { get; set; }  // Products on sale

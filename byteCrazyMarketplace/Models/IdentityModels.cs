@@ -30,7 +30,7 @@ namespace byteCrazy.Models
         {
             Database.SetInitializer<ApplicationDbContext>(null);
         }
-
+        public DbSet<AdminUserList> AdminUserList { get; set; }
         public DbSet<AdminListModels> Listings { get; set; }
         public DbSet<ListingActivityLog> ListingActivityLogs { get; set; }
 
