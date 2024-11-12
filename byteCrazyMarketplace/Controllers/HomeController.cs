@@ -63,11 +63,11 @@ namespace byteCrazy.Controllers
             }
             return RedirectToAction("Info", new { productID = model.productID });
         }
-        // POST: /Home/Edit
+        // POST: /Home/EditInfo
         [HttpPost]
         public ActionResult EditInfo(EditInfoModel model)
         {
-            string updateQuery = "UPDATE [dbo].[Product] SET [description] = '" + model.description + "' WHERE [productID] = '" + model.productID + "'";
+            string updateQuery = "UPDATE [dbo].[Product] SET [description] = '" + model.description + "' AND [locationValue] = '" + model.locationValue + "' AND [priceValue] = '" + model.priceValue + "' WHERE [productID] = '" + model.productID + "'";
             // 更新数据
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -82,6 +82,27 @@ namespace byteCrazy.Controllers
                 }
             }
             return RedirectToAction("Info", new { productID = model.productID });
+        }
+
+        // POST: /Home/Report
+        [HttpPost]
+        public ActionResult Report(EditInfoModel model)
+        {
+            string updateQuery = "UPDATE [dbo].[Product] SET [status] = 'pending' WHERE [productID] = '" + model.productID + "'";
+            // 更新数据
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // 打开数据库连接
+                connection.Open();
+
+                // 创建 SqlCommand 对象
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    Console.WriteLine(updateQuery);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return RedirectToAction("List", new { });
         }
         public static string GenerateRandomString(int length)
         {
@@ -102,7 +123,7 @@ namespace byteCrazy.Controllers
         {
             string productID = GenerateRandomString(8);
             
-            string updateQuery = "INSERT INTO [dbo].[Product] ([productID], [title], [description], [categoryID], [location], [price], [imgUrl], [sellerID], [buyerID], [status], [postedDate], [purchaseDate]) OUTPUT INSERTED.[productID], INSERTED.[title], INSERTED.[description], INSERTED.[categoryID], INSERTED.[location], INSERTED.[price], INSERTED.[imgUrl], INSERTED.[sellerID], INSERTED.[buyerID], INSERTED.[status], INSERTED.[postedDate], INSERTED.[purchaseDate] VALUES (N'" + productID + "', N'title', N'description', N'CAT003', N'location', 1000, N'/UploadedImages/20241112020656.png', N'" + User.Identity.GetUserId() +"', NULL, N'active', '2024-11-11 01:00:00.000', NULL)";
+            string updateQuery = "INSERT INTO [dbo].[Product] ([productID], [title], [description], [categoryID], [location], [price], [imgUrl], [sellerID], [buyerID], [status], [postedDate], [purchaseDate]) OUTPUT INSERTED.[productID], INSERTED.[title], INSERTED.[description], INSERTED.[categoryID], INSERTED.[location], INSERTED.[price], INSERTED.[imgUrl], INSERTED.[sellerID], INSERTED.[buyerID], INSERTED.[status], INSERTED.[postedDate], INSERTED.[purchaseDate] VALUES (N'" + productID + "', N'title', N'description', N'CAT003', N'location', 1000, N'/UploadedImages/20241112020656.png', N'" + User.Identity.GetUserId() +"', NULL, N'pending', '2024-11-11 01:00:00.000', NULL)";
             // 更新数据
             Console.WriteLine(updateQuery);
             using (SqlConnection connection = new SqlConnection(connectionString))
