@@ -65,9 +65,16 @@
     }
 
     .page-title {
+        display: flex;
+        justify-content: space-between;
+
         margin-bottom: 20px;
         font-size: x-large;
     }
+        .page-title .search-button {
+            height: 31px;
+        }
+
     .select-box {
         margin-bottom: 10px;
         width: 100%;
@@ -166,7 +173,11 @@
         transform: scale(1.01); /* 鼠标悬浮时放大1.1倍 */
     }
 </style>
-<div class="page-title">Search results for @searchKeyword</div>
+<div class="page-title">
+    <p>Search results for @searchKeyword</p>
+
+    <button class="btn btn-primary search-button" onclick="addNew()" title="Release Items">Post New Product</button>
+</div>
 <div class="select-box">
     <select name="Categories" id="Categories">
         <option value="">Categories</option>
@@ -203,7 +214,6 @@
     </div>
     <button class="btn btn-primary search-button" onclick="Search()" title="Search">Search</button>
     <button class="btn btn-outline-primary" onclick="ClearFilter()" title="Clear">Clear Filter</button>
-    <button class="btn btn-primary search-button" onclick="addNew()" title="Release Items">Post New Product</button>
 </div>
 
 <div id="search-result-none">
