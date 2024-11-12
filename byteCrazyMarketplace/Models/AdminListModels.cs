@@ -52,25 +52,25 @@ namespace byteCrazy.Models
         //[Required]
         //public ListingStatus Status { get; set; }
 
-        // 将枚举逻辑封装在模型中
+      
         public ListingStatus Status
         {
             get
             {
-                // 将字符串转换为枚举
+             
                 if (Enum.TryParse(StatusString, out ListingStatus status))
                 {
                     return status;
                 }
                 else
                 {
-                    // 处理未知状态，例如返回默认值
-                    return ListingStatus.pending; // 可以根据需求调整
+                  
+                    return ListingStatus.pending; 
                 }
             }
             set
             {
-                // 将枚举转换为字符串并存储
+              
                 StatusString = value.ToString();
             }
         }

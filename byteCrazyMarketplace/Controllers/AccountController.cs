@@ -105,8 +105,7 @@ namespace byteCrazy.Controllers
             return View(model);
         }
 
-   
-        //
+
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -197,6 +196,10 @@ namespace byteCrazy.Controllers
         {
             var userId = User.Identity.GetUserId();
 
+            ViewBag.IsAdmin = await _context.AdminUserList
+             .AnyAsync(a => a.userID == userId && a.status == "Active");
+
+
             var publishedProductsOnSale = await _context.Product
                 .Where(p => p.SellerID == userId && p.Status == "onsale")
                 .ToListAsync();
@@ -281,6 +284,19 @@ namespace byteCrazy.Controllers
         public ActionResult ResetPassword(string email, string code)
         {
             return code == null ? View("Error") : View(new ResetPasswordViewModel { Email = email, Code = code });
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> DirectResetPassword()
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            return RedirectToAction("ResetPassword", new { email = user.Email, code = code });
         }
 
         [HttpPost]
