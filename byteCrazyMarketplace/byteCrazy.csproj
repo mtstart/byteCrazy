@@ -296,6 +296,12 @@
     <Content Include="UploadedImages\27.png" />
     <Content Include="UploadedImages\3.jpg" />
     <Content Include="UploadedImages\5f886af8-73bc-4890-be1d-c1eee89f4149_thumbnail.jpg" />
+    <Content Include="UploadedImages\browse.jpg" />
+    <Content Include="UploadedImages\catalog.jpg" />
+    <Content Include="UploadedImages\clothings.jpg" />
+    <Content Include="UploadedImages\electronics.jpg" />
+    <Content Include="UploadedImages\renting.jpg" />
+    <Content Include="UploadedImages\sell.jpg" />
     <Content Include="Views\Home\Info.cshtml" />
     <Content Include="Views\Home\List.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
