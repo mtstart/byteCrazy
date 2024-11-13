@@ -349,6 +349,7 @@
     <Content Include="Views\Admin\AdminTotalLists.cshtml" />
     <Content Include="Views\Account\UserCenter.cshtml" />
     <Content Include="UploadedImages\11.webp" />
+    <Content Include="Views\Home\AddNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

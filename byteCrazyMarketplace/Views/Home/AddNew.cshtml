@@ -1,0 +1,307 @@
+﻿@using byteCrazy.Models
+@using Dapper;
+@using Newtonsoft.Json;
+@using System.Data.SqlClient
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "byteCrazy";
+    using (SqlConnection connection = new SqlConnection("Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;"))
+    {
+        connection.Open();
+        string productID = Request.QueryString["productID"];
+        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [productID] = @productID";
+        sql = "select aspnetusers.username, PhoneNumber, category.title as 'category', product.* from product inner join aspnetusers on product.sellerID = aspnetusers.Id inner join category \r\n\ton product.categoryID = Category.categoryID\r\nwhere product.productID = @productID";
+
+        IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID });
+        ViewBag.dataTemp = JsonConvert.SerializeObject(results);
+        ViewBag.productID = Request.QueryString["productID"];
+        if (results.ToList().Count > 0)
+        {
+            ViewBag.showImg = results.ToList()[0].imgUrl;
+        }
+    }
+}
+
+
+<style>
+    .swiper-slide img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper {
+        width: 680px;
+        height: 430px;
+    }
+
+    .to-box {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 60px;
+    }
+
+    .product-image-section {
+        width: 50%;
+    }
+
+        .product-image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+            user-select: none;
+        }
+
+    .product-info-section {
+        width: 50%;
+        margin-left: 18px;
+    }
+
+        .product-info-section > .seller-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: large;
+        }
+
+            .product-info-section > .seller-info > .user-icon > i {
+                color: #8a8aa1;
+                font-size: xx-large;
+            }
+
+            .product-info-section > .seller-info > .icon-function-list {
+                margin-left: auto;
+            }
+
+                .product-info-section > .seller-info > .icon-function-list button {
+                    background-color: transparent;
+                    font-size: large;
+                    padding: 0px 8px !important;
+                }
+
+                    .product-info-section > .seller-info > .icon-function-list button:hover {
+                        color: #009fe9;
+                    }
+
+        .product-info-section > .product-title > .name {
+            font-size: large;
+        }
+
+        .product-info-section > .product-title > .description {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .product-info-section > .product-title > .price {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .product-info-section > .product-purchase {
+            padding-top: 20px;
+        }
+
+            .product-info-section > .product-purchase button:hover {
+                background-color: aliceblue;
+            }
+
+
+    p.detailed, textarea.detailed {
+        background-color: #f9f7f7;
+        padding: 20px;
+        width: 100%;
+    }
+
+        p.detailed img {
+            display: block;
+            width: 100%;
+            margin: auto;
+        }
+
+    .edit-box {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        margin-bottom: 10px;
+    }
+
+        .edit-box button {
+            background-color: #009fe9;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+    .editing .description {
+        border: 1px solid #8a8aa1;
+    }
+
+    .product-image-section {
+        position: relative;
+    }
+
+        .product-image-section .btn {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border-radius: 0;
+            background-color: gainsboro;
+        }
+
+        .product-image-section form, .product-image-section form input[type="file"] {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            left: 0;
+            top: 0;
+        }
+
+    #saveButton {
+        display: none;
+    }
+
+    .editing #saveButton {
+        display: inline-block;
+    }
+    .editing #priceValue, .editing, .editing #titleValue {
+        border: 1px solid #ccc;
+    }
+</style>
+<div class="to-box">
+
+    <div class="product-card">
+        <div class="product-image-section">
+            <img id="uploaded-image" src="@ViewBag.showImg">
+            <button class="btn" data-toggle="tooltip" data-placement="top" title="Edit Product" AutoPostback="false">
+                <i class="bi bi-pencil-fill"></i>
+                <form action="/Home/AddImage" id="uploadForm" method="post" enctype="multipart/form-data">
+                    <input type="text" style="display: none;" name="productID" value="@ViewBag.productID">
+                    <input type="file" id="UploadedImage" onchange="document.getElementById('uploadForm').submit();" name="UploadedImage" accept="image/*" required>
+                </form>
+            </button>
+        </div>
+        <div class="product-info-section">
+            <div class="seller-info">
+                <div class="user-icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="user-name">
+                    @User.Identity.GetUserName()@User.Identity.GetUserId()
+                </div>
+            </div>
+            <div class="product-title">
+                <div class="name">
+                    <div id="titleValue">
+                        Title
+                        New Product 1
+                    </div>
+                </div>
+
+                <select name="Categories" id="Categories">
+                    <option value="">Categories</option>
+                    <option value="CAT001">Electronics</option>
+                    <option value="CAT002">Clothing</option>
+                    <option value="CAT003">Books</option>
+                    <option value="CAT004">Home & Garden</option>
+                    <option value="CAT005">Sports & Outdoors</option>
+                </select>
+                <div class="price">
+                    <div>$</div>
+                    <div id="priceValue">
+                        90
+                    </div>
+                </div>
+                <select name="Location" id="Locations">
+                    <option value="">Location</option>
+                    <option value="Newcastle">Newcastle</option>
+                    <option value="Hamilton">Hamilton</option>
+                    <option value="Cooks Hill">Cooks Hill</option>
+                    <option value="Merewether">Merewether</option>
+                    <option value="Islington">Islington</option>
+                    <option value="Broadmeadow">Broadmeadow</option>
+                    <option value="Adamstown">Adamstown</option>
+                    <option value="Stockton">Stockton</option>
+                    <option value="Waratah">Waratah</option>
+                    <option value="Charlestown">Charlestown</option>
+                    <option value="Others">Others</option>
+                </select>
+                <div class="description detailed">
+                    description
+                </div>
+                <div>
+                    <button type="button" id="saveButton" class="btn btn-outline-primary" onclick="save()">Create Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Initialize Swiper -->
+<script>
+
+    function loadFirst() {
+        toggleEditContent(true);
+    }
+    window.onload = loadFirst;
+
+    function toggleEditContent(edit) {
+        if (edit) {
+            document.querySelector('.detailed').setAttribute('contenteditable', "")
+            document.querySelector('#priceValue').setAttribute('contenteditable', "")
+            document.querySelector('#titleValue').setAttribute('contenteditable', "")
+            document.querySelector('.to-box').classList.add('editing')
+
+        } else {
+            document.querySelector('.detailed').removeAttribute('contenteditable', "")
+            document.querySelector('#priceValue').removeAttribute('contenteditable', "")
+            document.querySelector('#titleValue').removeAttribute('contenteditable', "")
+            document.querySelector('.to-box').classList.remove('editing')
+
+        }
+
+    }
+
+    function save () {
+        const formdata = new FormData();
+        formdata.append("description", document.querySelector('.description').innerText);
+        formdata.append("priceValue", document.querySelector('#priceValue').innerText);
+        formdata.append("title", document.querySelector('#titleValue').innerText);
+        formdata.append("categoryValue", window.Categories.value);
+        formdata.append("locationValue", window.Locations.value);
+        formdata.append("imgUrl", document.getElementById("uploaded-image").getAttribute('src'));
+        
+        
+        const requestOptions = {
+        method: "POST",
+        body: formdata,
+        redirect: "follow"
+        };
+
+        fetch("/Home/Create", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+            location.href = '/Home/List';
+        })
+        .catch((error) => console.error(error));
+    }
+
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
