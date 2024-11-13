@@ -201,7 +201,7 @@ namespace byteCrazy.Controllers
 
 
             var publishedProductsOnSale = await _context.Product
-                .Where(p => p.SellerID == userId && p.Status == "onsale")
+                .Where(p => p.SellerID == userId && p.Status == "Active")
                 .ToListAsync();
 
             var publishedProductsSold = await _context.Product
