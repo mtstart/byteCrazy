@@ -9,6 +9,8 @@ using System.Linq;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using byteCrazy.Models;
+using Microsoft.SqlServer.Server;
+using System.Xml.Linq;
 
 namespace byteCrazy.Controllers
 {
@@ -117,30 +119,85 @@ namespace byteCrazy.Controllers
 
             return result.ToString();
         }
-        // Get: /Home/AddNew
+
+        // Post: /Home/Create
         [AllowAnonymous]
-        public ActionResult AddNew()
+        public ActionResult Create(EditInfoModel model)
         {
             string productID = GenerateRandomString(8);
-            
-            string updateQuery = "INSERT INTO [dbo].[Product] ([productID], [title], [description], [categoryID], [location], [price], [imgUrl], [sellerID], [buyerID], [status], [postedDate], [purchaseDate]) OUTPUT INSERTED.[productID], INSERTED.[title], INSERTED.[description], INSERTED.[categoryID], INSERTED.[location], INSERTED.[price], INSERTED.[imgUrl], INSERTED.[sellerID], INSERTED.[buyerID], INSERTED.[status], INSERTED.[postedDate], INSERTED.[purchaseDate] VALUES (N'" + productID + "', N'title', N'description', N'CAT003', N'location', 1000, N'/UploadedImages/20241112020656.png', N'" + User.Identity.GetUserId() +"', NULL, N'pending', '2024-11-11 01:00:00.000', NULL)";
-            // Update data
-            Console.WriteLine(updateQuery);
+
+            string insertQuery = "";
+            insertQuery = "INSERT INTO [dbo].[Product] VALUES (";
+            insertQuery += "N'" + productID + "', ";
+            insertQuery += "N'" + model.title + "', ";
+            insertQuery += "N'" + model.description + "', ";
+            insertQuery += "N'" + model.categoryValue + "', ";
+            insertQuery += "N'" + model.locationValue + "', ";
+            insertQuery += "N'" + model.priceValue + "', ";
+            insertQuery += "N'" + model.imgUrl + "', ";
+            insertQuery += "N'" + User.Identity.GetUserId() + "', ";
+            insertQuery += "NULL" + ", ";
+            insertQuery += "N'" + "active" + "', ";
+            insertQuery += "getdate()" + ", ";
+            insertQuery += "NULL";
+            insertQuery += ")";
+
+
+            // Insert data
+            Console.WriteLine(insertQuery);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 // Create connection
                 connection.Open();
 
                 // Create connection destination
-                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
-                    Console.WriteLine(updateQuery);
+                    Console.WriteLine(insertQuery);
                     command.ExecuteNonQuery();
                 }
             }
+
             return RedirectToAction("Info", new { productID = productID });
+
         }
-        //
+
+        // Get: /Home/AddImage
+        [AllowAnonymous]
+        public ActionResult AddImage(ImageUploadViewModel model)
+        {
+            string filePath = "";
+            if (model.UploadedImage != null && model.UploadedImage.ContentLength > 0)
+            {
+                // check image path, make sure is in project folder
+                string uploadPath = Server.MapPath("~/UploadedImages");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                // save image
+                string fileName = Path.GetFileName(model.UploadedImage.FileName);
+                filePath = Path.Combine(uploadPath, fileName);
+                model.UploadedImage.SaveAs(filePath);
+
+                fileName = "/UploadedImages/" + fileName;
+                ViewBag.showImg = fileName;
+
+                Console.WriteLine(fileName);
+
+            }
+
+            return View("AddNew");
+        }
+
+        // Get: /Home/AddNew
+        [AllowAnonymous]
+        public ActionResult AddNew()
+        {
+            return View();
+        }
+        
         // GET: /Home/List
         [AllowAnonymous]
         public ActionResult List()
