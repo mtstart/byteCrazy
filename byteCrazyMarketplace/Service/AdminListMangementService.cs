@@ -89,7 +89,7 @@ namespace byteCrazy.Interface
                                     actives.Add(product);
                                     break;
                                 case ListingStatus.pending:
-                                    actives.Add(product);
+                                    pendings.Add(product);
                                     break;
                                 default:
                                     break;
