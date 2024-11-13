@@ -139,6 +139,7 @@ namespace byteCrazy.Controllers
             insertQuery += "NULL" + ", ";
             insertQuery += "N'" + "active" + "', ";
             insertQuery += "getdate()" + ", ";
+            insertQuery += "NULL" + ", ";
             insertQuery += "NULL";
             insertQuery += ")";
 

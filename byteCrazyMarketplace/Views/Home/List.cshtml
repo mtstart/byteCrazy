@@ -27,7 +27,7 @@
         string priceMax = Request.QueryString["priceMax"];
         string description = Request.QueryString["description"];
         string latest = Request.QueryString["Latest"];
-        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [status] = 'active'";
+        string sql = "SELECT * FROM [dbo].[Product] WHERE [status] = 'active'";
         searchKeyword = description;
 
         if (!string.IsNullOrEmpty(categoryStr))
