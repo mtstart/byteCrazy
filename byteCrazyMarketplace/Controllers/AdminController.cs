@@ -74,7 +74,7 @@ namespace byteCrazy.Controllers
             {
                 return RedirectToAction("UserCenter", "Account");
             }
-            return View("AdminTotalLists", _listingManagementServiceInterface.pendings);
+            return View("AdminPendingLists", _listingManagementServiceInterface.pendings);
         }
 
         public async Task<ActionResult> ActiveListings()
@@ -83,7 +83,7 @@ namespace byteCrazy.Controllers
             {
                 return RedirectToAction("UserCenter", "Account");
             }
-            return View("AdminTotalLists", _listingManagementServiceInterface.actives);
+            return View("AdminActivityLists", _listingManagementServiceInterface.actives);
         }
 
         public async Task<ActionResult> SoldItems()
@@ -92,7 +92,7 @@ namespace byteCrazy.Controllers
             {
                 return RedirectToAction("UserCenter", "Account");
             }
-            return View("AdminTotalLists", _listingManagementServiceInterface.solds);
+            return View("AdminSoldedLists", _listingManagementServiceInterface.solds);
         }
 
         public async Task<ActionResult> ViewDetails(string productID, string isApproved, string rejectionReason)
