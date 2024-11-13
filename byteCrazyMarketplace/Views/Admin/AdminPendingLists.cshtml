@@ -28,6 +28,7 @@
             <th>Price</th>
             <th>Seller</th>
             <th>Date Posted</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -47,9 +48,8 @@
                 <td>@listing.Price.ToString("C")</td>
                 <td>@listing.SellerName</td>
                 <td>@listing.CreatedAt.ToShortDateString()</td>
+                <td>@listing.StatusString</td>
                 <td>
-                    <button class="btn btn-success btn-sm" onclick="approveListing('@listing.ProductID')">Approve</button>
-                    <button class="btn btn-danger btn-sm" onclick="rejectListing('@listing.ProductID')">Reject</button>
                     <button class="btn btn-primary btn-sm" onclick="viewDetails('@listing.ProductID')">View Details</button>
                 </td>
             </tr>
