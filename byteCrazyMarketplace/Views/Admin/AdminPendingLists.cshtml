@@ -73,6 +73,6 @@
     function viewDetails(id) {
         // Implement view details logic
         console.log('View details for listing:', id);
-         window.location.href = '@Url.Action("ViewDetails", "Admin")' + "?id=" + id;
+        window.location.href = '@Url.Action("ViewDetails", "Admin")' + "?productID=" + id+ "&isApproved=&rejectionReason=";
     }
 </script>

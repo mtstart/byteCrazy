@@ -95,14 +95,22 @@ namespace byteCrazy.Controllers
             return View("AdminTotalLists", _listingManagementServiceInterface.solds);
         }
 
-        public async Task<ActionResult> ViewDetails(string id)
+        public async Task<ActionResult> ViewDetails(string productID, string isApproved, string rejectionReason)
         {
             if (!await IsAdmin())
             {
                 return RedirectToAction("UserCenter", "Account");
             }
-            Console.WriteLine($"Hello, {id}!");
-            AdminListModels model = _listingManagementServiceInterface.SearchProdunct(id);
+            if (isApproved == "true")
+            {
+                _listingManagementServiceInterface.ApproveProduct(productID);
+            }
+            if (isApproved == "false")
+            {
+                _listingManagementServiceInterface.RejectProduct(productID, rejectionReason);
+            }
+            Console.WriteLine($"Hello, {productID}!");
+            AdminListModels model = _listingManagementServiceInterface.SearchProdunct(productID);
             return View("AdminVerifyLists", model);
         }
 
@@ -128,7 +136,6 @@ namespace byteCrazy.Controllers
             {
                 return RedirectToAction("UserCenter", "Account");
             }
-
             if (isApproved)
             {
                 _listingManagementServiceInterface.ApproveProduct(productID);

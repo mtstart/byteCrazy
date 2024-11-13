@@ -166,7 +166,6 @@ namespace byteCrazy.Interface
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-               
                 string updateQuery = "UPDATE Product SET Status = @Status, RejectionReason = @RejectionReason WHERE ProductID = @ProductID";
 
                 using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
