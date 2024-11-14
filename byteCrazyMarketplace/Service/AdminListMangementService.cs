@@ -10,18 +10,6 @@ using System.Configuration;
 
 namespace byteCrazy.Interface
 {
-    //TODO: 后续修改为全局
-    /*
-        1.94.181.181
-        端口
-        1433
-        验证方式
-        SQL Server验证
-        用户名
-        admin
-        密码
-        XQNQ0MEUL9yrtyhmlfe1866
-     */
     public class AdminListMangementService : IAdminListMangementService
     {
         private string connectionString = "Server=1.94.181.181,1433;Database=byteCrazy;User Id=admin;Password=XQNQ0MEUL9yrtyhmlfe1866;";

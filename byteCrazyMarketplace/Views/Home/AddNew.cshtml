@@ -9,8 +9,7 @@
     {
         connection.Open();
         string productID = Request.QueryString["productID"];
-        string sql = "SELECT TOP 9 * FROM [dbo].[Product] WHERE [productID] = @productID";
-        sql = "select aspnetusers.username, PhoneNumber, category.title as 'category', product.* from product inner join aspnetusers on product.sellerID = aspnetusers.Id inner join category \r\n\ton product.categoryID = Category.categoryID\r\nwhere product.productID = @productID";
+        string sql = "select aspnetusers.username, PhoneNumber, category.title as 'category', product.* from product inner join aspnetusers on product.sellerID = aspnetusers.Id inner join category \r\n\ton product.categoryID = Category.categoryID\r\nwhere product.productID = @productID";
 
         IEnumerable<dynamic> results = connection.Query(sql, new { productID = productID });
         ViewBag.dataTemp = JsonConvert.SerializeObject(results);
@@ -250,7 +249,6 @@
 
 </div>
 
-<!-- Initialize Swiper -->
 <script>
 
     function loadFirst() {
@@ -258,6 +256,8 @@
     }
     window.onload = loadFirst;
 
+
+    // show editing boxes
     function toggleEditContent(edit) {
         if (edit) {
             document.querySelector('.detailed').setAttribute('contenteditable', "")
@@ -275,6 +275,7 @@
 
     }
 
+    // Create New Product
     function save () {
         const formdata = new FormData();
         formdata.append("description", document.querySelector('.description').innerText);

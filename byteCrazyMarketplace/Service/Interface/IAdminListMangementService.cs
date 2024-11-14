@@ -19,10 +19,10 @@ namespace byteCrazy.Interface
         //Active
         List<AdminListModels> actives { get; set; }
 
-        // 获取所有产品信息
+        // Get All Product details
         void GetAllPostedProducts();
 
-        // 获取对应产品信息
+        // Get Specific Product details
         //Task<AdminListModels>  SearchProdunct(string productId);
         AdminListModels SearchProdunct(string productId);
 

@@ -2,6 +2,7 @@ using System.Web;
 
 namespace byteCrazy.Models
 {
+    // data model for getting user input
     public class EditInfoModel
     {
         public string description { get; set; }

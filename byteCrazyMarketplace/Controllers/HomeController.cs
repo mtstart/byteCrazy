@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace byteCrazy.Controllers
 {
-    // 创建视图模型
+    // Create view model
     public class IndexViewModel
     {
         public string CategoryId { get; set; }
@@ -36,14 +36,14 @@ namespace byteCrazy.Controllers
         {
             if (model.UploadedImage != null && model.UploadedImage.ContentLength > 0)
             {
-                // 确定保存上传文件的路径
+                // check image path, make sure is in project folder
                 string uploadPath = Server.MapPath("~/UploadedImages");
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
 
-                // 保存文件
+                // save image
                 string fileName = Path.GetFileName(model.UploadedImage.FileName);
                 string filePath = Path.Combine(uploadPath, fileName);
                 model.UploadedImage.SaveAs(filePath);
