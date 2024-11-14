@@ -86,6 +86,27 @@ namespace byteCrazy.Controllers
             return RedirectToAction("Info", new { productID = model.productID });
         }
 
+        // POST: /Home/SaveLike
+        [HttpPost]
+        public ActionResult SaveLike(SaveLikeModel model)
+        {
+            string updateQuery = "UPDATE [dbo].[AspNetUsers] SET [likeList] = '" + model.likeList + "' WHERE [Id] = '" + model.userID + "'";
+            // Update data
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Open connection
+                connection.Open();
+
+                // Create connection destination
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    Console.WriteLine(updateQuery);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return RedirectToAction("Info", new { productID = model.productID });
+        }
+
         // POST: /Home/Report
         [HttpPost]
         public ActionResult Report(EditInfoModel model)

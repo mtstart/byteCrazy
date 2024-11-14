@@ -19,6 +19,14 @@
         {
             ViewBag.showImg = results.ToList()[0].imgUrl;
         }
+        string sql2 = "SELECT TOP 1 * FROM [dbo].[AspNetUsers] WHERE [Id] = '" + User.Identity.GetUserId() + "'";
+
+        IEnumerable<dynamic> results2 = connection.Query(sql2, new { });
+        if (results2.ToList().Count > 0)
+        {
+            ViewBag.likeList = results2.ToList()[0].likeList;
+        }
+        
     }
 }
 
@@ -247,13 +255,30 @@
         likeS = JSON.parse(likeS)
         likeS[productID] = !likeS[productID]
         localStorage.setItem('likeList', JSON.stringify(likeS))
+        const formdata = new FormData();
+        formdata.append("likeList", JSON.stringify(likeS));
+        formdata.append("userID", "@User.Identity.GetUserId()");
+        formdata.append("productID", "@ViewBag.productID");
+
+        const requestOptions = {
+        method: "POST",
+        body: formdata,
+        redirect: "follow"
+        };
+
+        fetch("/Home/SaveLike", requestOptions)
+        .then((response) => response.text())
+            .then((result) => {
+                toggleEditContent(false);
+                location.reload();
+        })
         location.reload()
     }
 
     let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'))
     setTimeout(() => {
         // Loading Bookmark Status
-        let likeS = localStorage.getItem('likeList')
+        let likeS = `@ViewBag.likeList`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>')
         if (!likeS) likeS = '{}'
         likeS = JSON.parse(likeS)
         if (likeS['@ViewBag.productID']) {
