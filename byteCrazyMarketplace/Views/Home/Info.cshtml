@@ -19,12 +19,14 @@
         {
             ViewBag.showImg = results.ToList()[0].imgUrl;
         }
-        string sql2 = "SELECT TOP 1 * FROM [dbo].[AspNetUsers] WHERE [Id] = '" + User.Identity.GetUserId() + "'";
+        string sql2 = "SELECT TOP 1 * FROM [dbo].[SavedProducts] WHERE [userID] = '" + User.Identity.GetUserId() + "' AND [productID] = '" + productID + "'";
 
-        IEnumerable<dynamic> results2 = connection.Query(sql2, new { });
+        IEnumerable<dynamic> results2 = connection.Query(sql2, new {userID = User.Identity.GetUserId(), productID = productID });
         if (results2.ToList().Count > 0)
         {
-            ViewBag.likeList = results2.ToList()[0].likeList;
+            ViewBag.likeList = 1;
+        } else {
+            ViewBag.likeList = 0;
         }
         
     }
@@ -250,13 +252,7 @@
     }
 
     function likeItem(productID) {
-        let likeS = localStorage.getItem('likeList')
-        if (!likeS) likeS = '{}'
-        likeS = JSON.parse(likeS)
-        likeS[productID] = !likeS[productID]
-        localStorage.setItem('likeList', JSON.stringify(likeS))
         const formdata = new FormData();
-        formdata.append("likeList", JSON.stringify(likeS));
         formdata.append("userID", "@User.Identity.GetUserId()");
         formdata.append("productID", "@ViewBag.productID");
 
@@ -266,7 +262,7 @@
         redirect: "follow"
         };
 
-        fetch("/Home/SaveLike", requestOptions)
+        fetch(@ViewBag.likeList == 0 ? "/Home/SaveLike" : "/Home/DeleteLike", requestOptions)
         .then((response) => response.text())
             .then((result) => {
                 toggleEditContent(false);
@@ -277,11 +273,8 @@
 
     let dataList = JSON.parse(`@ViewBag.dataTemp`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>'))
     setTimeout(() => {
-        // Loading Bookmark Status
-        let likeS = `@ViewBag.likeList`.replaceAll('&quot;', '"').replaceAll('\r', '').replaceAll('\n', '<br>')
-        if (!likeS) likeS = '{}'
-        likeS = JSON.parse(likeS)
-        if (likeS['@ViewBag.productID']) {
+
+        if (@ViewBag.likeList == 1) {
             document.querySelector('.like-icon').classList.add('bi-bookmark-check-fill')
         } else {
             document.querySelector('.like-icon').classList.add('bi-bookmark')

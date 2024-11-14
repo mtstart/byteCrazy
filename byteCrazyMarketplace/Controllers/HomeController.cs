@@ -90,7 +90,28 @@ namespace byteCrazy.Controllers
         [HttpPost]
         public ActionResult SaveLike(SaveLikeModel model)
         {
-            string updateQuery = "UPDATE [dbo].[AspNetUsers] SET [likeList] = '" + model.likeList + "' WHERE [Id] = '" + model.userID + "'";
+            string updateQuery = "INSERT INTO [dbo].[SavedProducts] (userID, productID, createdDate) VALUES (" + model.userID + ", '" + model.productID + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "');";
+            // Update data
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Open connection
+                connection.Open();
+
+                // Create connection destination
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    Console.WriteLine(updateQuery);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return RedirectToAction("Info", new { productID = model.productID });
+        }
+
+        // POST: /Home/DeleteLike
+        [HttpPost]
+        public ActionResult DeleteLike(SaveLikeModel model)
+        {
+            string updateQuery = "DELETE FROM [dbo].[SavedProducts] WHERE CONVERT(NVARCHAR(MAX), [userID]) = '" + model.userID + "' AND CONVERT(NVARCHAR(MAX), [productID]) = '" + model.productID + "'";
             // Update data
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

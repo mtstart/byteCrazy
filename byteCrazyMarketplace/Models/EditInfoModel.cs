@@ -17,7 +17,6 @@ namespace byteCrazy.Models
     public class SaveLikeModel
     {
         public string productID { get; set; }
-        public string likeList { get; set; }
         public string userID { get; set; }
     }
 }
