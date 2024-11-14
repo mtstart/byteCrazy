@@ -1,7 +1,7 @@
 ﻿$(function () {
     app.initialize();
 
-    // 激活 Knockout
+    //  Knockout
     ko.validation.init({ grouping: { observable: false } });
     ko.applyBindings(app, document.body);
 });

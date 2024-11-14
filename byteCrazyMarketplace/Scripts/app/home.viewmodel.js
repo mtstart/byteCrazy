@@ -14,7 +14,7 @@
                     'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
                 },
                 success: function (data) {
-                    self.myHometown('你的家乡是:' + data.hometown);
+                    self.myHometown('Your hometown is:' + data.hometown);
                 }
             });
         });

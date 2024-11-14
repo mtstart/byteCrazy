@@ -1,15 +1,15 @@
 ﻿@model byteCrazy.Models.ExternalLoginListViewModel
 @using Microsoft.Owin.Security
 
-<h4>使用其他服务登录。</h4>
+<h4>Sign in using another service.</h4>
 <hr />
 @{
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0) {
         <div>
             <p>
-                未配置外部身份验证服务。请参阅<a href="https://go.microsoft.com/fwlink/?LinkId=403804">此文章</a>
-                详细了解如何设置此 ASP.NET 应用程序以支持通过外部服务登录。
+                No external authentication service is configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+for more information on how to set up this ASP.NET application to support login through an external service.
             </p>
         </div>
     }
@@ -19,7 +19,7 @@
             <div id="socialLoginList">
                 <p>
                     @foreach (AuthenticationDescription p in loginProviders) {
-                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="使用你的 @p.Caption 帐户登录">@p.AuthenticationType</button>
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Use your @p.Caption Account Login">@p.AuthenticationType</button>
                     }
                 </p>
             </div>
